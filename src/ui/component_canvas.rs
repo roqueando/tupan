@@ -4,8 +4,9 @@ use egui::{Align2, Color32, CornerRadius, Pos2, Rect, Stroke, Ui, Vec2};
 use egui_plot::{Legend, Line, Plot, PlotPoints};
 
 /// Size of a placed component block on the canvas (in element-space).
-const BLOCK_W: f32 = 160.0;
-const BLOCK_H: f32 = 70.0;
+/// Taller blocks for editable components to fit slider + input.
+const BLOCK_W: f32 = 180.0;
+const BLOCK_H: f32 = 90.0;
 const PLOT_BLOCK_W: f32 = 280.0;
 const PLOT_BLOCK_H: f32 = 200.0;
 
@@ -327,7 +328,6 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
             } else {
                 // Deselect
                 cc.selected_index = None;
-                cc.editing_index = None;
             }
             ui.ctx().request_repaint();
         }
@@ -355,11 +355,8 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
             if let Some(idx) = hit {
                 let ctype = cc.placed_components[idx].component_type;
                 if ctype.is_editable() {
-                    cc.editing_index = Some(idx);
                     cc.selected_index = Some(idx);
-                    let val = cc.get_value(ctype);
-                    cc.edit_buffer = format_value(val, ctype.unit());
-                    state.status_message = format!("Editing {}", ctype.name());
+                    state.status_message = format!("Editing {} — use slider or type value", ctype.name());
                 } else if ctype.is_plot() {
                     state.status_message = "Plot component selected — parameters adjust the curve".to_owned();
                 } else {
@@ -374,14 +371,27 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
     draw_grid(&painter, origin, response.rect, zoom);
 
     // ── Draw all placed components ──
-    // First pass: draw non-plot components with painter
-    // Second pass: draw plot components using egui_plot (needs Ui scope)
+    // First pass: draw editable selected components using Ui (needs &mut cc)
+    // We need to know which index is selected before iterating to avoid borrow issues.
+    let selected_idx = cc.selected_index;
+    if let Some(s_idx) = selected_idx {
+        if s_idx < cc.placed_components.len() {
+            let ctype = cc.placed_components[s_idx].component_type;
+            if ctype.is_editable() && !ctype.is_plot() {
+                draw_editable_component_ui(ui, s_idx, cc, origin, zoom, &response.rect);
+            }
+        }
+    }
+
+    // Second pass: draw all other components with painter (read-only access)
     for (idx, component) in cc.placed_components.iter().enumerate() {
         if component.component_type.is_plot() {
-            continue; // handle plots separately
+            continue;
         }
         let is_selected = cc.selected_index == Some(idx);
-        let is_editing = cc.editing_index == Some(idx);
+        if is_selected && component.component_type.is_editable() {
+            continue; // already drawn above
+        }
         let value = cc.get_value(component.component_type);
         draw_component_block(
             &painter,
@@ -389,8 +399,6 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
             origin,
             zoom,
             is_selected,
-            is_editing,
-            &cc.edit_buffer,
             value,
         );
     }
@@ -441,7 +449,7 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
                     .layout(*ui.layout()),
             );
 
-            draw_plot(&mut child_ui, &cc.shared_params, &cc.edit_buffer);
+            draw_plot(&mut child_ui, &cc.shared_params);
         }
     }
 
@@ -499,7 +507,7 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState) {
 // ── Plot rendering ──────────────────────────────────────────────────
 
 /// Draw the actual plot content using egui_plot.
-fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _edit_buffer: &str) {
+fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams) {
     let l = params.calc_inductance();
     let c = params.calc_capacitance();
 
@@ -576,28 +584,6 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _edit_buffer
 fn handle_keyboard(ui: &mut Ui, state: &mut AppState) {
     let cc = &mut state.component_canvas;
 
-    // Enter to confirm inline edit
-    if ui.input(|i| i.key_pressed(egui::Key::Enter)) {
-        if let Some(idx) = cc.editing_index {
-            if idx < cc.placed_components.len() {
-                let ctype = cc.placed_components[idx].component_type;
-                let parsed: f64 = cc.edit_buffer.trim().parse().unwrap_or(0.0);
-                cc.set_value(ctype, parsed);
-                state.status_message = format!("{} set to {}", ctype.name(), format_value(parsed, ctype.unit()));
-            }
-            cc.editing_index = None;
-            cc.edit_buffer.clear();
-            ui.ctx().request_repaint();
-        }
-    }
-
-    // Escape to cancel inline edit
-    if ui.input(|i| i.key_pressed(egui::Key::Escape)) {
-        cc.editing_index = None;
-        cc.edit_buffer.clear();
-        ui.ctx().request_repaint();
-    }
-
     // Delete/Backspace to remove selected
     let delete_pressed = ui.input(|i| {
         i.key_pressed(egui::Key::Delete) || i.key_pressed(egui::Key::Backspace)
@@ -611,15 +597,146 @@ fn handle_keyboard(ui: &mut Ui, state: &mut AppState) {
 
 // ── Drawing helpers ──────────────────────────────────────────────────
 
-/// Draw a single component block on the canvas (non-plot components).
+/// Draw a selected editable component as an interactive Ui area with input + slider.
+fn draw_editable_component_ui(
+    ui: &mut Ui,
+    idx: usize,
+    cc: &mut crate::app::state::ComponentCanvasState,
+    origin: Pos2,
+    zoom: f32,
+    canvas_rect: &Rect,
+) {
+    let component = &cc.placed_components[idx];
+    let rect = block_rect(component.pos, origin, zoom);
+    let clipped = rect.intersect(*canvas_rect);
+    if !clipped.is_positive() {
+        return;
+    }
+
+    let ctype = component.component_type;
+
+    // Allocate a Ui child in the block's screen area
+    let block_screen_rect = egui::Rect::from_min_size(clipped.min, Vec2::new(clipped.size().x, clipped.size().y));
+    let mut child_ui = ui.new_child(
+        egui::UiBuilder::new()
+            .max_rect(block_screen_rect)
+            .layout(egui::Layout::top_down_justified(egui::Align::Center)),
+    );
+
+    // Draw background
+    let bg_color = Color32::from_rgba_premultiplied(30, 60, 120, 220);
+    let painter = child_ui.painter();
+    painter.rect_filled(
+        Rect::from_min_size(Pos2::ZERO, clipped.size()),
+        CornerRadius::same(6),
+        bg_color,
+    );
+    painter.rect_stroke(
+        Rect::from_min_size(Pos2::ZERO, clipped.size()),
+        CornerRadius::same(6),
+        Stroke::new(2.5, Color32::YELLOW),
+        egui::StrokeKind::Outside,
+    );
+
+    // Title
+    child_ui.add_space(4.0);
+    child_ui.label(
+        egui::RichText::new(ctype.name())
+            .color(Color32::WHITE)
+            .monospace()
+            .size(12.0),
+    );
+
+    // ── Interactive controls ──
+    // Get the current value (in display units — duty cycle as %, delta_il as %, etc.)
+    let current_value = cc.get_value(ctype);
+
+    // Define range and speed per component type
+    let (range_min, range_max, speed, suffix): (f64, f64, f64, &str) = match ctype {
+        CanvasComponentType::Vin => (1.0, 500.0, 1.0, "V"),
+        CanvasComponentType::Vout => (0.5, 500.0, 1.0, "V"),
+        CanvasComponentType::DutyCycle => (1.0, 99.0, 0.5, "%"),
+        CanvasComponentType::Frequency => (100.0, 1_000_000.0, 1000.0, "Hz"),
+        CanvasComponentType::DeltaIl => (0.1, 100.0, 0.5, "%"),
+        CanvasComponentType::IoutMax => (0.1, 100.0, 0.2, "A"),
+        CanvasComponentType::DeltaVo => (0.01, 50.0, 0.1, "%"),
+        _ => return,
+    };
+
+    // Use a copy that we can modify
+    let mut value_copy = current_value;
+
+    // Slider row
+    child_ui.add(
+        egui::Slider::new(&mut value_copy, range_min..=range_max)
+            .suffix(suffix)
+            .show_value(false)
+            .clamping(egui::SliderClamping::Never),
+    );
+
+    // DragValue (input field) row
+    child_ui.horizontal(|ui| {
+        ui.add_space(8.0);
+        // Show the formatted value before the input
+        ui.label(
+            egui::RichText::new("=")
+                .color(Color32::GRAY)
+                .monospace(),
+        );
+
+        let response = ui.add(
+            egui::DragValue::new(&mut value_copy)
+                .speed(speed)
+                .suffix(suffix),
+        );
+
+        // Show computed values below for L/C affected components
+        if ctype == CanvasComponentType::Vin || ctype == CanvasComponentType::Vout
+            || ctype == CanvasComponentType::DutyCycle || ctype == CanvasComponentType::Frequency
+            || ctype == CanvasComponentType::DeltaIl || ctype == CanvasComponentType::IoutMax
+            || ctype == CanvasComponentType::DeltaVo
+        {
+            // We'll show the resulting L/C values below instead
+        }
+
+        if response.changed() {
+            // Apply the value to shared params
+            let changed = cc.set_value(ctype, value_copy);
+            if changed {
+                // Show computed L/C result in status bar
+                ui.ctx().request_repaint();
+            }
+        }
+    });
+
+    // Show computed L and C values below the controls
+    child_ui.add_space(2.0);
+    let l_val = cc.shared_params.calc_inductance();
+    let c_val = cc.shared_params.calc_capacitance();
+    child_ui.label(
+        egui::RichText::new(format!(
+            "L = {}  C = {}",
+            format_eng_small(l_val, "H"),
+            format_eng_small(c_val, "F"),
+        ))
+        .color(Color32::from_rgb(150, 200, 255))
+        .size(9.0)
+        .monospace(),
+    );
+
+    // Ensure repaint is active while dragging
+    if child_ui.ctx().is_pointer_over_egui() {
+        child_ui.ctx().request_repaint();
+    }
+}
+
+/// Draw a single component block on the canvas (non-plot, non-interactive).
 fn draw_component_block(
     painter: &egui::Painter,
     component: &crate::app::state::PlacedComponent,
     origin: Pos2,
     zoom: f32,
     selected: bool,
-    editing: bool,
-    edit_buffer: &str,
     value: f64,
 ) {
     let rect = block_rect(component.pos, origin, zoom);
@@ -653,24 +770,30 @@ fn draw_component_block(
     );
 
     // Value display
-    let value_text = if editing {
-        format!("> {}", edit_buffer)
-    } else {
-        let unit = component.component_type.unit();
-        format_value(value, unit)
-    };
-
+    let unit = component.component_type.unit();
+    let value_text = format_value(value, unit);
     painter.text(
         Pos2::new(rect.center().x, rect.max.y - 10.0),
         Align2::CENTER_BOTTOM,
         &value_text,
         egui::TextStyle::Monospace.resolve(&egui::Style::default()),
-        if editing {
+        if selected {
             Color32::YELLOW
         } else {
             Color32::from_rgb(150, 200, 255)
         },
     );
+
+    // Hint for editable but not selected
+    if component.component_type.is_editable() && !selected {
+        painter.text(
+            Pos2::new(rect.right() - 4.0, rect.min.y + 10.0),
+            Align2::RIGHT_TOP,
+            "click to edit",
+            egui::TextStyle::Monospace.resolve(&egui::Style::default()),
+            Color32::from_rgba_premultiplied(150, 150, 150, 120),
+        );
+    }
 }
 
 /// Compute the screen-space rectangle for a normal component block.

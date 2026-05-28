@@ -451,10 +451,6 @@ pub struct ComponentCanvasState {
     pub selected_index: Option<usize>,
     /// The component type currently selected from the palette (for placing)
     pub palette_selection: Option<CanvasComponentType>,
-    /// Whether we're currently editing a value inline
-    pub editing_index: Option<usize>,
-    /// Buffer for inline text editing
-    pub edit_buffer: String,
 }
 
 impl Default for ComponentCanvasState {
@@ -467,8 +463,6 @@ impl Default for ComponentCanvasState {
             next_id: 1,
             selected_index: None,
             palette_selection: None,
-            editing_index: None,
-            edit_buffer: String::new(),
         }
     }
 }
@@ -477,7 +471,6 @@ impl ComponentCanvasState {
     pub fn clear(&mut self) {
         self.placed_components.clear();
         self.selected_index = None;
-        self.editing_index = None;
     }
 
     pub fn delete_selected(&mut self) {
@@ -485,7 +478,6 @@ impl ComponentCanvasState {
             if idx < self.placed_components.len() {
                 self.placed_components.remove(idx);
                 self.selected_index = None;
-                self.editing_index = None;
             }
         }
     }

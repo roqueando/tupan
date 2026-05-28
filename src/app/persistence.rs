@@ -33,11 +33,8 @@ pub fn load_project(path: &str) -> Result<AppState> {
     let data = fs::read_to_string(path)
         .with_context(|| format!("failed to read project from {}", path))?;
 
-    let mut state: AppState = serde_json::from_str(&data)
+    let state: AppState = serde_json::from_str(&data)
         .with_context(|| format!("failed to parse project from {}", path))?;
-
-    // After loading, recalculate to ensure results are consistent
-    state.recalculate();
 
     Ok(state)
 }

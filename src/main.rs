@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 mod app;
 mod domain;
 mod execution;
@@ -16,7 +18,7 @@ fn main() -> eframe::Result<()> {
     };
 
     eframe::run_native(
-        "Tupan Notebook",
+        "Tupan — Component Canvas",
         options,
         Box::new(|cc| Ok(Box::new(app::TupanApp::new(cc)))),
     )

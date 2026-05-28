@@ -60,11 +60,13 @@ impl eframe::App for TupanApp {
                     )
                 }
                 AppTab::SchematicEditor => self.state.editor.elements.clone(),
+                AppTab::ComponentCanvas => Vec::new(),
             };
 
             let svg_path = match self.state.active_tab {
                 AppTab::Converters => format!("schematic_{}.svg", self.state.active_converter.name()),
                 AppTab::SchematicEditor => "schematic_drawing.svg".to_owned(),
+                AppTab::ComponentCanvas => "component_canvas.svg".to_owned(),
             };
 
             match crate::app::persistence::export_schematic_svg(&svg_path, &elements) {
@@ -110,6 +112,15 @@ impl eframe::App for TupanApp {
                     && !editor_selected
                 {
                     self.state.switch_tab(AppTab::SchematicEditor);
+                }
+
+                let canvas_selected = self.state.active_tab == AppTab::ComponentCanvas;
+                if ui
+                    .selectable_label(canvas_selected, "📐 Component Canvas")
+                    .clicked()
+                    && !canvas_selected
+                {
+                    self.state.switch_tab(AppTab::ComponentCanvas);
                 }
 
                 ui.separator();
@@ -169,6 +180,7 @@ impl eframe::App for TupanApp {
             match self.state.active_tab {
                 AppTab::Converters => show_workspace(ui, &mut self.state),
                 AppTab::SchematicEditor => show_schematic_editor(ui, &mut self.state),
+                AppTab::ComponentCanvas => crate::ui::component_canvas::show_component_canvas(ui, &mut self.state),
             }
         });
     }

@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use crate::{
     notebook::model::Notebook,
     ui::cell_view::{self, CellAction},

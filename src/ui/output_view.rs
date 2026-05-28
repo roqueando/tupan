@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use crate::notebook::model::{Output, OutputData, OutputStream};
 use egui::{Color32, RichText, Ui};
 

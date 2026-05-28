@@ -1,8 +1,11 @@
 mod app;
+mod domain;
 mod execution;
 mod notebook;
 mod reactive;
 mod runtime;
+mod schematic;
+mod simulation;
 mod ui;
 
 fn main() -> eframe::Result<()> {

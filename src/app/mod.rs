@@ -1,235 +1,206 @@
 pub mod commands;
+pub mod persistence;
+pub mod state;
 
-use crate::{
-    notebook::{
-        ids::CellId,
-        model::{Cell, CellExecutionState, Notebook, Output, OutputData, OutputStream},
-        persistence,
-    },
-    runtime::{protocol::ExecuteStatus, RuntimeClient, RuntimeEvent},
-    ui::{
-        cell_view::CellAction,
-        notebook_view,
-        toolbar::{self, ToolbarAction},
-    },
-};
-use chrono::Utc;
+use crate::app::state::{AppState, AppTab};
+use crate::ui::schematic_editor::show_schematic_editor;
+use crate::ui::workspace::show_workspace;
 use eframe::egui;
-use std::sync::mpsc::Receiver;
+use std::path::PathBuf;
 
+/// Main application struct for Tupan.
 pub struct TupanApp {
-    notebook: Notebook,
-    notebook_path: String,
-    runtime: RuntimeClient,
-    runtime_events: Receiver<RuntimeEvent>,
-    status: String,
+    /// Engineering workspace state
+    pub state: AppState,
+
+    /// Project file path
+    project_path: PathBuf,
+
+    /// Whether a file dialog is pending
+    pending_export_svg: bool,
 }
 
 impl TupanApp {
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-        let (runtime, runtime_events) = RuntimeClient::start();
+        let mut state = AppState::default();
+        state.status_message = "ready — use File menu to save/load".to_owned();
+        state.recalculate();
+
         Self {
-            notebook: Notebook::new(),
-            notebook_path: "notebook.tupan.json".to_owned(),
-            runtime,
-            runtime_events,
-            status: "starting kernel".to_owned(),
-        }
-    }
-
-    fn drain_runtime_events(&mut self, ctx: &egui::Context) {
-        while let Ok(event) = self.runtime_events.try_recv() {
-            self.apply_runtime_event(event);
-            ctx.request_repaint();
-        }
-    }
-
-    fn apply_runtime_event(&mut self, event: RuntimeEvent) {
-        match event {
-            RuntimeEvent::KernelReady => {
-                self.status = "kernel ready".to_owned();
-            }
-            RuntimeEvent::CellRunning { cell_id } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    cell.execution = CellExecutionState::Running;
-                }
-            }
-            RuntimeEvent::Stdout { cell_id, text } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    cell.outputs.push(Output::Text {
-                        stream: OutputStream::Stdout,
-                        text,
-                    });
-                }
-            }
-            RuntimeEvent::Stderr { cell_id, text } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    cell.outputs.push(Output::Text {
-                        stream: OutputStream::Stderr,
-                        text,
-                    });
-                }
-            }
-            RuntimeEvent::Result { cell_id, repr } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    cell.outputs.push(Output::Result {
-                        mime: "text/plain".to_owned(),
-                        data: OutputData::Text(repr),
-                    });
-                }
-            }
-            RuntimeEvent::Error {
-                cell_id,
-                name,
-                message,
-                traceback,
-            } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    cell.outputs.push(Output::Error {
-                        name,
-                        message,
-                        traceback,
-                    });
-                }
-            }
-            RuntimeEvent::CellFinished { cell_id, status } => {
-                if let Some(cell) = self.cell_mut(cell_id) {
-                    let last_run_at = Utc::now();
-                    cell.execution = match status {
-                        ExecuteStatus::Success => CellExecutionState::Success { last_run_at },
-                        ExecuteStatus::Error => CellExecutionState::Error { last_run_at },
-                    };
-                    cell.dependencies.stale = false;
-                }
-            }
-            RuntimeEvent::RuntimeError { message } => {
-                self.status = format!("runtime error: {message}");
-            }
-        }
-    }
-
-    fn cell_mut(&mut self, cell_id: CellId) -> Option<&mut Cell> {
-        self.notebook
-            .cells
-            .iter_mut()
-            .find(|cell| cell.id == cell_id)
-    }
-
-    fn handle_toolbar_action(&mut self, action: ToolbarAction) {
-        match action {
-            ToolbarAction::New => {
-                self.notebook = Notebook::new();
-                self.status = "new notebook".to_owned();
-                self.runtime.restart();
-            }
-            ToolbarAction::Open => match persistence::load_notebook(&self.notebook_path) {
-                Ok(notebook) => {
-                    self.notebook = notebook;
-                    self.status = "notebook loaded".to_owned();
-                    self.runtime.restart();
-                }
-                Err(error) => {
-                    self.status = format!("open failed: {error}");
-                }
-            },
-            ToolbarAction::Save => {
-                match persistence::save_notebook(&self.notebook_path, &mut self.notebook) {
-                    Ok(()) => {
-                        self.status = "notebook saved".to_owned();
-                    }
-                    Err(error) => {
-                        self.status = format!("save failed: {error}");
-                    }
-                }
-            }
-            ToolbarAction::AddCell => {
-                self.notebook.add_python_cell();
-            }
-            ToolbarAction::RestartKernel => {
-                for cell in &mut self.notebook.cells {
-                    if matches!(
-                        cell.execution,
-                        CellExecutionState::Running | CellExecutionState::Queued
-                    ) {
-                        cell.execution = CellExecutionState::Stale;
-                    }
-                }
-                self.status = "restarting kernel".to_owned();
-                self.runtime.restart();
-            }
-            ToolbarAction::None => {}
-        }
-    }
-
-    fn handle_cell_action(&mut self, index: usize, action: CellAction) {
-        if index >= self.notebook.cells.len() {
-            return;
-        }
-
-        match action {
-            CellAction::Run => {
-                let cell = &mut self.notebook.cells[index];
-                cell.outputs.clear();
-                cell.execution = CellExecutionState::Queued;
-                self.runtime.execute(cell.id, cell.source.clone());
-            }
-            CellAction::Delete => {
-                self.notebook.cells.remove(index);
-                if self.notebook.cells.is_empty() {
-                    self.notebook.add_python_cell();
-                }
-            }
-            CellAction::MoveUp => {
-                if index > 0 {
-                    self.notebook.cells.swap(index, index - 1);
-                }
-            }
-            CellAction::MoveDown => {
-                if index + 1 < self.notebook.cells.len() {
-                    self.notebook.cells.swap(index, index + 1);
-                }
-            }
-            CellAction::ClearOutputs => {
-                self.notebook.cells[index].outputs.clear();
-            }
-            CellAction::None => {}
+            state,
+            project_path: PathBuf::from("project.tupan.json"),
+            pending_export_svg: false,
         }
     }
 }
 
 impl eframe::App for TupanApp {
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        self.drain_runtime_events(ctx);
+        // Handle deferred SVG export
+        if self.pending_export_svg {
+            self.pending_export_svg = false;
+
+            let elements = match self.state.active_tab {
+                AppTab::Converters => {
+                    let comp_values = crate::schematic::layout::ComponentValues {
+                        vin: format_eng(self.state.params.vin, "V"),
+                        vout: format_eng(self.state.results.vout, "V"),
+                        inductance: format_eng(self.state.params.inductance, "H"),
+                        capacitance: format_eng(self.state.params.capacitance, "F"),
+                        load: format_eng(self.state.params.load_resistance, "Ω"),
+                        frequency: format_eng(self.state.params.frequency, "Hz"),
+                        _duty_cycle: format!(
+                            "{:.1}%",
+                            self.state.params.duty_cycle * 100.0
+                        ),
+                    };
+                    crate::schematic::layout::generate_schematic(
+                        self.state.active_converter,
+                        &comp_values,
+                    )
+                }
+                AppTab::SchematicEditor => self.state.editor.elements.clone(),
+            };
+
+            let svg_path = match self.state.active_tab {
+                AppTab::Converters => format!("schematic_{}.svg", self.state.active_converter.name()),
+                AppTab::SchematicEditor => "schematic_drawing.svg".to_owned(),
+            };
+
+            match crate::app::persistence::export_schematic_svg(&svg_path, &elements) {
+                Ok(()) => {
+                    self.state.status_message = format!("SVG exported to {}", svg_path);
+                }
+                Err(e) => {
+                    self.state.status_message = format!("SVG export failed: {}", e);
+                }
+            }
+            ctx.request_repaint();
+        }
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        // Apply theme
+        if self.state.theme == state::Theme::Dark {
+            ui.visuals_mut().dark_mode = true;
+        } else {
+            ui.visuals_mut().dark_mode = false;
+        }
+
+        // ===== TOOLBAR =====
         egui::Panel::top("toolbar").show_inside(ui, |ui| {
-            let action = toolbar::show_toolbar(
-                ui,
-                &mut self.notebook.title,
-                &mut self.notebook_path,
-                &self.status,
-            );
-            self.handle_toolbar_action(action);
+            ui.horizontal(|ui| {
+                ui.heading("⚡ Tupan");
+                ui.separator();
+
+                // Tab switcher
+                let conv_selected = self.state.active_tab == AppTab::Converters;
+                if ui
+                    .selectable_label(conv_selected, "⚙ Converters")
+                    .clicked()
+                    && !conv_selected
+                {
+                    self.state.switch_tab(AppTab::Converters);
+                }
+
+                let editor_selected = self.state.active_tab == AppTab::SchematicEditor;
+                if ui
+                    .selectable_label(editor_selected, "✏️ Schematic Editor")
+                    .clicked()
+                    && !editor_selected
+                {
+                    self.state.switch_tab(AppTab::SchematicEditor);
+                }
+
+                ui.separator();
+                ui.label(&self.state.status_message);
+
+                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                    // Export SVG button
+                    if ui.button("📷 Export SVG").clicked() {
+                        self.pending_export_svg = true;
+                    }
+
+                    // Save project button
+                    if ui.button("💾 Save").clicked() {
+                        let path = self.project_path.to_str().unwrap_or("project.tupan.json");
+                        match crate::app::persistence::save_project(path, &self.state) {
+                            Ok(()) => {
+                                self.state.status_message = format!("Saved to {}", path);
+                            }
+                            Err(e) => {
+                                self.state.status_message = format!("Save failed: {}", e);
+                            }
+                        }
+                    }
+
+                    // Load project button
+                    if ui.button("📂 Load").clicked() {
+                        let path = self.project_path.to_str().unwrap_or("project.tupan.json");
+                        match crate::app::persistence::load_project(path) {
+                            Ok(loaded_state) => {
+                                self.state = loaded_state;
+                                self.state.status_message = format!("Loaded from {}", path);
+                            }
+                            Err(e) => {
+                                self.state.status_message = format!("Load failed: {}", e);
+                            }
+                        }
+                    }
+
+                    // Theme toggle
+                    if ui.button("🌙/☀️").clicked() {
+                        self.state.theme = match self.state.theme {
+                            state::Theme::Dark => state::Theme::Light,
+                            state::Theme::Light => state::Theme::Dark,
+                        };
+                    }
+
+                    // Schematic toggle (only relevant for converters tab)
+                    if self.state.active_tab == AppTab::Converters {
+                        ui.checkbox(&mut self.state.show_schematic, "Schematic");
+                    }
+                });
+            });
         });
 
+        // ===== MAIN CONTENT =====
         egui::CentralPanel::default().show_inside(ui, |ui| {
-            egui::ScrollArea::vertical().show(ui, |ui| {
-                let actions = notebook_view::show_notebook(ui, &mut self.notebook);
-                for action in actions {
-                    if action.source_changed {
-                        self.notebook.cells[action.index].execution = CellExecutionState::Stale;
-                        self.notebook.mark_following_stale(action.index);
-                    }
-                    self.handle_cell_action(action.index, action.action);
-                }
-            });
+            match self.state.active_tab {
+                AppTab::Converters => show_workspace(ui, &mut self.state),
+                AppTab::SchematicEditor => show_schematic_editor(ui, &mut self.state),
+            }
         });
     }
 }
 
-impl Drop for TupanApp {
-    fn drop(&mut self) {
-        self.runtime.shutdown();
+/// Format a value with SI prefix (duplicated from result_panel for standalone use).
+fn format_eng(value: f64, unit: &str) -> String {
+    let abs_val = value.abs();
+    if abs_val == 0.0 {
+        return format!("0 {}", unit);
     }
+    let (scaled, prefix) = if abs_val >= 1_000_000.0 {
+        (value / 1_000_000.0, "M")
+    } else if abs_val >= 1_000.0 {
+        (value / 1_000.0, "k")
+    } else if abs_val >= 1.0 {
+        (value, "")
+    } else if abs_val >= 0.001 {
+        (value * 1_000.0, "m")
+    } else if abs_val >= 0.000_001 {
+        (value * 1_000_000.0, "μ")
+    } else if abs_val >= 1e-9 {
+        (value * 1e9, "n")
+    } else {
+        (value * 1e12, "p")
+    };
+    let decimals = if scaled.abs() > 100.0 {
+        1
+    } else if scaled.abs() > 10.0 {
+        2
+    } else {
+        3
+    };
+    format!("{:.prec$} {}{}", scaled, prefix, unit, prec = decimals)
 }

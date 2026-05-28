@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use crate::{
     notebook::model::{Cell, CellExecutionState, CellKind},
     ui::output_view,

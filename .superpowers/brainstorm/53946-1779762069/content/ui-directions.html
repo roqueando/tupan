@@ -1,0 +1,101 @@
+<h2>Choose a UI direction for Tupan</h2>
+<p class="subtitle">Three clean notebook directions. Click one in the browser if it feels closest; your text feedback matters most.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a-command-center" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height:280px;background:#f6f7f9;border:1px solid #d9dde5;border-radius:12px;overflow:hidden;font-family:Inter,system-ui,sans-serif;color:#1e293b">
+        <div style="height:44px;background:#ffffff;border-bottom:1px solid #e4e7ec;display:flex;align-items:center;justify-content:space-between;padding:0 16px">
+          <strong>Tupan</strong>
+          <div style="display:flex;gap:8px">
+            <span style="background:#eef2f7;border:1px solid #d8dee8;border-radius:6px;padding:4px 9px;font-size:12px">Open</span>
+            <span style="background:#111827;color:white;border-radius:6px;padding:4px 9px;font-size:12px">Run</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:210px 1fr;height:236px">
+          <div style="background:#ffffff;border-right:1px solid #e4e7ec;padding:14px">
+            <div style="font-size:12px;color:#64748b;margin-bottom:10px">Notebook</div>
+            <div style="height:28px;background:#f1f5f9;border-radius:6px;margin-bottom:8px"></div>
+            <div style="height:28px;background:#f8fafc;border-radius:6px;margin-bottom:8px"></div>
+            <div style="height:28px;background:#f8fafc;border-radius:6px"></div>
+          </div>
+          <div style="padding:16px">
+            <div style="background:white;border:1px solid #dfe4eb;border-radius:10px;padding:12px;margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#64748b">Cell 1 · Python</span><span style="font-size:12px;color:#059669">success</span></div>
+              <div style="height:62px;background:#0f172a;border-radius:7px"></div>
+            </div>
+            <div style="background:white;border:1px solid #dfe4eb;border-radius:10px;padding:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#64748b">Cell 2 · Python</span><span style="font-size:12px;color:#d97706">stale</span></div>
+              <div style="height:46px;background:#0f172a;border-radius:7px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Command Center</h3>
+      <p>Left notebook outline, central cell canvas, compact top commands. Best when we want future dependency/variable panels soon.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b-focused-paper" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height:280px;background:#fbfbfc;border:1px solid #dedfe4;border-radius:12px;overflow:hidden;font-family:Inter,system-ui,sans-serif;color:#20242c">
+        <div style="height:52px;background:#fbfbfc;border-bottom:1px solid #eceef2;display:flex;align-items:center;justify-content:space-between;padding:0 28px">
+          <div><strong>Untitled notebook</strong><span style="font-size:12px;color:#7b8190;margin-left:12px">kernel ready</span></div>
+          <span style="background:#20242c;color:white;border-radius:7px;padding:5px 11px;font-size:12px">Add cell</span>
+        </div>
+        <div style="max-width:760px;margin:0 auto;padding:18px 24px">
+          <div style="background:#ffffff;border:1px solid #e2e5ea;border-radius:8px;padding:12px;margin-bottom:14px;box-shadow:0 1px 2px rgba(20,25,35,.05)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:12px;color:#697282">Python</span><span style="font-size:12px;color:#697282">Run · Clear</span></div>
+            <div style="height:68px;background:#f5f7fa;border:1px solid #e5e7eb;border-radius:6px"></div>
+            <div style="margin-top:10px;height:28px;background:#eef8f3;border-left:3px solid #10b981;border-radius:5px"></div>
+          </div>
+          <div style="background:#ffffff;border:1px solid #e2e5ea;border-radius:8px;padding:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:12px;color:#697282">Python</span><span style="font-size:12px;color:#697282">Run · Clear</span></div>
+            <div style="height:58px;background:#f5f7fa;border:1px solid #e5e7eb;border-radius:6px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Focused Paper</h3>
+      <p>A calm, centered notebook canvas with minimal chrome. Best when writing and reading cells should feel primary.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c-technical-workbench" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height:280px;background:#111827;border:1px solid #263244;border-radius:12px;overflow:hidden;font-family:Inter,system-ui,sans-serif;color:#e5e7eb">
+        <div style="height:42px;background:#0b1020;border-bottom:1px solid #263244;display:flex;align-items:center;gap:10px;padding:0 14px">
+          <strong style="color:#f9fafb">Tupan</strong>
+          <span style="font-size:12px;color:#9ca3af">notebook.tupan.json</span>
+          <span style="margin-left:auto;background:#1d4ed8;border-radius:6px;padding:4px 9px;font-size:12px">Run selected</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 230px;height:238px">
+          <div style="padding:14px">
+            <div style="background:#151e2e;border:1px solid #2c3a50;border-radius:8px;padding:10px;margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#93c5fd">cell_01.py</span><span style="font-size:12px;color:#34d399">success</span></div>
+              <div style="height:64px;background:#090e1a;border-radius:6px"></div>
+            </div>
+            <div style="background:#151e2e;border:1px solid #2c3a50;border-radius:8px;padding:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:#93c5fd">cell_02.py</span><span style="font-size:12px;color:#fbbf24">queued</span></div>
+              <div style="height:50px;background:#090e1a;border-radius:6px"></div>
+            </div>
+          </div>
+          <div style="background:#0f172a;border-left:1px solid #263244;padding:14px">
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px">Runtime</div>
+            <div style="height:28px;background:#172033;border-radius:6px;margin-bottom:8px"></div>
+            <div style="height:28px;background:#172033;border-radius:6px;margin-bottom:8px"></div>
+            <div style="font-size:12px;color:#9ca3af;margin:16px 0 10px">Variables</div>
+            <div style="height:58px;background:#172033;border-radius:6px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Technical Workbench</h3>
+      <p>Dark, dense, runtime-forward layout. Best for power users who want variables, execution state, and debugging visible.</p>
+    </div>
+  </div>
+</div>

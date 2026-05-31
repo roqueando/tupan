@@ -8,6 +8,7 @@ mod reactive;
 mod runtime;
 mod schematic;
 mod simulation;
+mod tupan_ui;
 mod ui;
 
 fn main() -> eframe::Result<()> {
@@ -20,6 +21,10 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "Tupan — Component Canvas",
         options,
-        Box::new(|cc| Ok(Box::new(app::TupanApp::new(cc)))),
+        Box::new(|cc| {
+            // Apply the Tupan design system on startup
+            tupan_ui::apply_style(&cc.egui_ctx);
+            Ok(Box::new(app::TupanApp::new(cc)))
+        }),
     )
 }

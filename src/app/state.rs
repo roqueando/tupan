@@ -120,6 +120,20 @@ pub struct PlacedComponent {
     pub id: u64,
     pub component_type: CanvasComponentType,
     pub pos: Pos,
+    /// Custom size for plots (width, height). None = use default.
+    /// Only meaningful for Plot components.
+    pub size_override: Option<(f32, f32)>,
+}
+
+impl PlacedComponent {
+    pub fn new(id: u64, component_type: CanvasComponentType, pos: Pos) -> Self {
+        Self {
+            id,
+            component_type,
+            pos,
+            size_override: None,
+        }
+    }
 }
 
 /// Shared parameters that drive all computations on the component canvas.
@@ -250,11 +264,7 @@ impl ComponentCanvasState {
     pub fn place_component(&mut self, component_type: CanvasComponentType, pos: Pos) {
         let id = self.next_id;
         self.next_id += 1;
-        self.placed_components.push(PlacedComponent {
-            id,
-            component_type,
-            pos,
-        });
+        self.placed_components.push(PlacedComponent::new(id, component_type, pos));
     }
 
     /// Get the display value for a given component type based on current shared params.

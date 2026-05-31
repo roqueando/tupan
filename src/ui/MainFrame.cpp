@@ -1,12 +1,10 @@
 #include "ui/MainFrame.h"
-#include "utils/Theme.h"
-#include <wx/splitter.h>
-#include <wx/stattext.h>
+#include <wx/sizer.h>
 
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
-    EVT_MENU(wxID_SAVE,       MainFrame::OnFileSave)
-    EVT_MENU(wxID_OPEN,       MainFrame::OnFileLoad)
-    EVT_MENU(2001,            MainFrame::OnFileExportSvg)
+    EVT_MENU(wxID_SAVE,  MainFrame::OnFileSave)
+    EVT_MENU(wxID_OPEN,  MainFrame::OnFileLoad)
+    EVT_MENU(2001,       MainFrame::OnThemeToggle)
 wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString& title)
@@ -14,55 +12,53 @@ MainFrame::MainFrame(const wxString& title)
 {
     SetMinSize(wxSize(900, 600));
 
-    wxMenu* fileMenu = new wxMenu();
-    fileMenu->Append(wxID_OPEN, "&Open...\tCtrl+O");
-    fileMenu->Append(wxID_SAVE, "&Save\tCtrl+S");
-    fileMenu->AppendSeparator();
-    fileMenu->Append(2001, "Export &SVG...");
-    fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_EXIT, "E&xit\tCtrl+Q");
-    wxMenuBar* menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, "&File");
-    SetMenuBar(menuBar);
-    CreateStatusBar(1)->SetStatusText("Tupan ready");
+    // Menu
+    wxMenuBar* mb = new wxMenuBar();
+    wxMenu* fm = new wxMenu();
+    fm->Append(wxID_OPEN, "&Open...\tCtrl+O");
+    fm->Append(wxID_SAVE, "&Save\tCtrl+S");
+    fm->AppendSeparator();
+    fm->Append(2001, "Toggle &Theme\tCtrl+T");
+    fm->AppendSeparator();
+    fm->Append(wxID_EXIT, "E&xit\tCtrl+Q");
+    mb->Append(fm, "&File");
+    SetMenuBar(mb);
 
-    // Simply test: splitter + ParamPanel vs placeholder
-    m_main_splitter = new wxSplitterWindow(this, wxID_ANY);
-    m_main_splitter->SetMinimumPaneSize(200);
+    CreateStatusBar(1)->SetStatusText(m_state.status_message.c_str());
 
-    m_param_panel = new ParamPanel(m_main_splitter, m_state);
-
-    // Right side: SchematicPanel + placeholder
-    wxPanel* rightPanel = new wxPanel(m_main_splitter, wxID_ANY);
-    wxBoxSizer* rs = new wxBoxSizer(wxVERTICAL);
-
-    m_schematic_panel = new SchematicPanel(rightPanel, m_state);
-    rs->Add(m_schematic_panel, 1, wxEXPAND | wxALL, 2);
-
-    m_plot_panel = new PlotPanel(rightPanel, m_state);
-    rs->Add(m_plot_panel, 2, wxEXPAND | wxALL, 2);
-
-    rightPanel->SetSizer(rs);
-
-    m_main_splitter->SplitVertically(m_param_panel, rightPanel, 250);
-
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->Add(m_main_splitter, 1, wxEXPAND);
-    SetSizer(mainSizer);
-
-    // Initial state
-    m_state.recalculate();
-    RefreshAll();
+    // Main content: just the CanvasPanel
+    m_canvas = new CanvasPanel(this, m_state);
+    wxBoxSizer* s = new wxBoxSizer(wxVERTICAL);
+    s->Add(m_canvas, 1, wxEXPAND);
+    SetSizer(s);
 }
 
-void MainFrame::OnFileSave(wxCommandEvent&) { GetStatusBar()->SetStatusText("Save"); }
-void MainFrame::OnFileLoad(wxCommandEvent&) { GetStatusBar()->SetStatusText("Open"); }
-void MainFrame::OnFileExportSvg(wxCommandEvent&) { GetStatusBar()->SetStatusText("Export"); }
-void MainFrame::OnParamChanged(wxCommandEvent&) {}
-void MainFrame::OnConverterChanged(wxCommandEvent&) {}
-void MainFrame::RefreshAll() {
-    if (m_param_panel)     { m_param_panel->Refresh(); }
-    if (m_schematic_panel) { m_schematic_panel->UpdateSchematic(); }
-    if (m_plot_panel)      { m_plot_panel->UpdatePlots(); }
-    if (m_result_panel)    { m_result_panel->UpdateDisplay(); }
+void MainFrame::OnFileSave(wxCommandEvent&) {
+    wxFileDialog dlg(this, "Save Project", "", "project.tupan.json",
+                     "*.tupan.json", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (dlg.ShowModal() == wxID_OK) {
+        if (persistence::save_project(dlg.GetPath().ToStdString(), m_state))
+            GetStatusBar()->SetStatusText("Project saved");
+        else
+            wxMessageBox("Failed to save", "Error", wxOK | wxICON_ERROR);
+    }
+}
+
+void MainFrame::OnFileLoad(wxCommandEvent&) {
+    wxFileDialog dlg(this, "Open Project", "", "",
+                     "*.tupan.json", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    if (dlg.ShowModal() == wxID_OK) {
+        if (persistence::load_project(dlg.GetPath().ToStdString(), m_state)) {
+            m_canvas->RefreshCanvas();
+            GetStatusBar()->SetStatusText("Project loaded");
+        } else {
+            wxMessageBox("Failed to load", "Error", wxOK | wxICON_ERROR);
+        }
+    }
+}
+
+void MainFrame::OnThemeToggle(wxCommandEvent&) {
+    m_state.theme = (m_state.theme == Theme::Dark) ? Theme::Light : Theme::Dark;
+    m_canvas->RefreshCanvas();
+    GetStatusBar()->SetStatusText(m_state.theme == Theme::Dark ? "Dark theme" : "Light theme");
 }

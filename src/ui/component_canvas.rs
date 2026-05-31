@@ -10,8 +10,7 @@ const PLOT_BLOCK_W: f32 = 280.0;
 const PLOT_BLOCK_H: f32 = 200.0;
 const GRID_SPACING: f32 = 40.0;
 
-// ── Design Palette ────────────────────────────────────────────────────
-
+// ── Design Palette ──
 mod palette {
     use egui::Color32;
     pub const ACCENT: Color32 = Color32::from_rgb(99, 130, 255);
@@ -19,8 +18,10 @@ mod palette {
     pub const ACCENT_DIM: Color32 = Color32::from_rgb(60, 90, 200);
     pub const CANVAS_BG_DARK: Color32 = Color32::from_rgb(18, 18, 26);
     pub const CANVAS_BG_LIGHT: Color32 = Color32::from_rgb(241, 239, 231);
-    pub const GRID_DARK: Color32 = Color32::from_rgba_premultiplied(60, 60, 80, 40);
-    pub const GRID_LIGHT: Color32 = Color32::from_rgba_premultiplied(0, 0, 0, 10);
+    pub const GRID_DARK: Color32 = Color32::from_rgba_premultiplied(60, 60, 80, 100);
+    pub const GRID_LIGHT: Color32 = Color32::from_rgba_premultiplied(0, 0, 0, 25);
+    pub const GRID_MAJOR_DARK: Color32 = Color32::from_rgba_premultiplied(80, 80, 105, 140);
+    pub const GRID_MAJOR_LIGHT: Color32 = Color32::from_rgba_premultiplied(0, 0, 0, 50);
     pub const SIDEBAR_BG_DARK: Color32 = Color32::from_rgb(22, 22, 32);
     pub const SIDEBAR_BG_LIGHT: Color32 = Color32::from_rgb(255, 255, 255);
     pub const SECTION_TITLE_DARK: Color32 = Color32::from_rgb(160, 170, 200);
@@ -48,16 +49,18 @@ mod palette {
     pub const STATUS_LIGHT: Color32 = Color32::from_rgba_premultiplied(110, 115, 135, 160);
     pub const PLOT_BG_DARK: Color32 = Color32::from_rgba_premultiplied(20, 22, 32, 230);
     pub const PLOT_BG_LIGHT: Color32 = Color32::from_rgba_premultiplied(245, 245, 250, 230);
+    pub const LABEL_BG_DARK: Color32 = Color32::from_rgba_premultiplied(0, 0, 0, 180);
+    pub const LABEL_BG_LIGHT: Color32 = Color32::from_rgba_premultiplied(255, 255, 255, 200);
 }
 
-// ── ThemeColors resolver ──────────────────────────────────────────────
-
+// ── ThemeColors resolver ──
 struct ThemeColors {
-    canvas_bg: Color32, grid: Color32, sidebar_bg: Color32, section_title: Color32,
+    canvas_bg: Color32, grid: Color32, grid_major: Color32,
+    sidebar_bg: Color32, section_title: Color32,
     input_bg: Color32, input_border: Color32, computed_bg: Color32, computed_border: Color32,
     text_primary: Color32, text_secondary: Color32, text_value: Color32,
     card_bg: Color32, card_hover: Color32, card_selected: Color32,
-    status: Color32, plot_bg: Color32,
+    status: Color32, plot_bg: Color32, label_bg: Color32,
 }
 
 impl ThemeColors {
@@ -65,6 +68,7 @@ impl ThemeColors {
         match theme {
             Theme::Dark => Self {
                 canvas_bg: palette::CANVAS_BG_DARK, grid: palette::GRID_DARK,
+                grid_major: palette::GRID_MAJOR_DARK,
                 sidebar_bg: palette::SIDEBAR_BG_DARK, section_title: palette::SECTION_TITLE_DARK,
                 input_bg: palette::INPUT_BG_DARK, input_border: palette::INPUT_BORDER,
                 computed_bg: palette::COMPUTED_BG_DARK, computed_border: palette::COMPUTED_BORDER,
@@ -72,10 +76,11 @@ impl ThemeColors {
                 text_value: palette::TEXT_VALUE_DARK,
                 card_bg: palette::CARD_BG_DARK, card_hover: palette::CARD_HOVER_DARK,
                 card_selected: palette::CARD_SELECTED_DARK, status: palette::STATUS_DARK,
-                plot_bg: palette::PLOT_BG_DARK,
+                plot_bg: palette::PLOT_BG_DARK, label_bg: palette::LABEL_BG_DARK,
             },
             Theme::Light => Self {
                 canvas_bg: palette::CANVAS_BG_LIGHT, grid: palette::GRID_LIGHT,
+                grid_major: palette::GRID_MAJOR_LIGHT,
                 sidebar_bg: palette::SIDEBAR_BG_LIGHT, section_title: palette::SECTION_TITLE_LIGHT,
                 input_bg: palette::INPUT_BG_LIGHT, input_border: palette::INPUT_BORDER,
                 computed_bg: palette::COMPUTED_BG_LIGHT, computed_border: palette::COMPUTED_BORDER,
@@ -83,67 +88,53 @@ impl ThemeColors {
                 text_value: palette::TEXT_VALUE_LIGHT,
                 card_bg: palette::CARD_BG_LIGHT, card_hover: palette::CARD_HOVER_LIGHT,
                 card_selected: palette::CARD_SELECTED_LIGHT, status: palette::STATUS_LIGHT,
-                plot_bg: palette::PLOT_BG_LIGHT,
+                plot_bg: palette::PLOT_BG_LIGHT, label_bg: palette::LABEL_BG_LIGHT,
             },
         }
     }
 }
 
-// ── Main entry ────────────────────────────────────────────────────────
-
+// ── Public entry point ──
 pub fn show_component_canvas(ui: &mut Ui, state: &mut AppState) {
     let colors = ThemeColors::resolve(state.theme);
-
     egui::Panel::left("canvas_sidebar")
         .resizable(true).default_size(220.0).min_size(180.0)
         .frame(egui::Frame { fill: colors.sidebar_bg, inner_margin: egui::Margin::symmetric(12, 8), ..Default::default() })
         .show_inside(ui, |ui| { draw_sidebar(ui, state, &colors); });
-
     egui::CentralPanel::default()
         .frame(egui::Frame { fill: colors.canvas_bg, ..Default::default() })
         .show_inside(ui, |ui| { handle_canvas(ui, state, &colors); });
-
     handle_keyboard(ui, state);
 }
 
-// ── Sidebar ───────────────────────────────────────────────────────────
-
+// ── Sidebar ──
 fn draw_sidebar(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
     let cc = &mut state.component_canvas;
-
     section_header(ui, "INPUTS", colors);
     ui.add_space(6.0);
     for &(ct, name, icon) in &[
-        (CanvasComponentType::Vin, "Vin", "⚡"),
-        (CanvasComponentType::Vout, "Vout", "🔌"),
-        (CanvasComponentType::DutyCycle, "Duty Cycle", "〰"),
-        (CanvasComponentType::Frequency, "Frequency", "📡"),
-        (CanvasComponentType::DeltaIl, "ΔiL", "📉"),
-        (CanvasComponentType::IoutMax, "Iout,max", "💧"),
-        (CanvasComponentType::DeltaVo, "ΔVo", "📊"),
-    ] {
-        draw_palette_card(ui, cc, ct, name, icon, colors);
-    }
-
+        (CanvasComponentType::Vin, "Vin", "\u{26a1}"),
+        (CanvasComponentType::Vout, "Vout", "\u{1f50c}"),
+        (CanvasComponentType::DutyCycle, "Duty Cycle", "\u{3030}"),
+        (CanvasComponentType::Frequency, "Frequency", "\u{1f4e1}"),
+        (CanvasComponentType::DeltaIl, "\u{394}iL", "\u{1f4c9}"),
+        (CanvasComponentType::IoutMax, "Iout,max", "\u{1f4a7}"),
+        (CanvasComponentType::DeltaVo, "\u{394}Vo", "\u{1f4ca}"),
+    ] { draw_palette_card(ui, cc, ct, name, icon, colors); }
     ui.add_space(12.0);
     section_header(ui, "COMPUTED", colors);
     ui.add_space(6.0);
     for &(ct, name, icon) in &[
-        (CanvasComponentType::Inductor, "Inductor (L)", "〰"),
-        (CanvasComponentType::Capacitor, "Capacitor (C)", "‖‖"),
-    ] {
-        draw_palette_card(ui, cc, ct, name, icon, colors);
-    }
-
+        (CanvasComponentType::Inductor, "Inductor (L)", "\u{3030}"),
+        (CanvasComponentType::Capacitor, "Capacitor (C)", "\u{2016}\u{2016}"),
+    ] { draw_palette_card(ui, cc, ct, name, icon, colors); }
     ui.add_space(12.0);
     section_header(ui, "VIZ", colors);
     ui.add_space(6.0);
-    draw_palette_card(ui, cc, CanvasComponentType::Plot, "Curve Plot", "📈", colors);
-
+    draw_palette_card(ui, cc, CanvasComponentType::Plot, "Curve Plot", "\u{1f4c8}", colors);
     ui.add_space(16.0);
     section_header(ui, "PARAMETERS", colors);
     ui.add_space(6.0);
-
     let mut changed = false;
     changed |= param_row(ui, "Vin", &mut cc.shared_params.vin, 1.0, 500.0, 1.0, "V", colors);
     changed |= param_row(ui, "Vout", &mut cc.shared_params.vout, 0.5, 500.0, 1.0, "V", colors);
@@ -157,20 +148,17 @@ fn draw_sidebar(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
         changed = true;
     }
     changed |= param_row(ui, "Freq", &mut cc.shared_params.frequency, 100.0, 1_000_000.0, 1000.0, "Hz", colors);
-    changed |= param_pct(ui, "ΔiL", &mut cc.shared_params.delta_il, 0.001, 1.0, colors);
+    changed |= param_pct(ui, "\u{394}iL", &mut cc.shared_params.delta_il, 0.001, 1.0, colors);
     changed |= param_row(ui, "Iout,max", &mut cc.shared_params.iout_max, 0.1, 100.0, 0.2, "A", colors);
-    changed |= param_pct(ui, "ΔVo", &mut cc.shared_params.delta_vo, 0.0001, 0.5, colors);
-
+    changed |= param_pct(ui, "\u{394}Vo", &mut cc.shared_params.delta_vo, 0.0001, 0.5, colors);
     ui.add_space(16.0);
     section_header(ui, "RESULTS", colors);
     ui.add_space(6.0);
     result_row(ui, "L", cc.shared_params.calc_inductance(), "H", colors);
     result_row(ui, "C", cc.shared_params.calc_capacitance(), "F", colors);
-    result_row(ui, "ΔiL(A)", cc.shared_params.calc_delta_il_amps(), "A", colors);
+    result_row(ui, "\u{394}iL(A)", cc.shared_params.calc_delta_il_amps(), "A", colors);
     if changed { state.status_message = "Parameters updated".to_owned(); }
 }
-
-// ── Sidebar helpers ───────────────────────────────────────────────────
 
 fn section_header(ui: &mut Ui, text: &str, colors: &ThemeColors) {
     ui.add_space(2.0);
@@ -220,8 +208,7 @@ fn result_row(ui: &mut Ui, label: &str, value: f64, unit: &str, colors: &ThemeCo
     });
 }
 
-// ── Canvas ────────────────────────────────────────────────────────────
-
+// ── Canvas ──
 fn handle_canvas(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
     let available = ui.available_size();
     let (response, painter) = ui.allocate_painter(available, egui::Sense::click_and_drag());
@@ -229,6 +216,7 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
     let origin = Pos2::new(response.rect.min.x + cc.pan_offset.0, response.rect.min.y + cc.pan_offset.1);
     let zoom = cc.zoom;
 
+    // ── Scroll / zoom ──
     let scroll = ui.input(|i| i.smooth_scroll_delta().y);
     if scroll != 0.0 {
         if let Some(cursor) = response.hover_pos() {
@@ -243,52 +231,61 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
         } else { cc.zoom = (cc.zoom * if scroll > 0.0 { 1.1 } else { 0.9 }).clamp(0.2, 5.0); ui.ctx().request_repaint(); }
     }
 
-    if response.dragged_by(egui::PointerButton::Primary) && cc.selected_index.is_none() {
+    // ── Pan ──
+    if response.dragged_by(egui::PointerButton::Primary) && cc.selected_index.is_none() && cc.palette_selection.is_none() {
         let d = response.drag_delta();
         cc.pan_offset.0 += d.x; cc.pan_offset.1 += d.y; ui.ctx().request_repaint();
     }
 
+    // ── Click to place / select ──
     if response.clicked_by(egui::PointerButton::Primary) {
         if let Some(cursor) = response.interact_pointer_pos() {
             let cp = screen_to_element(cursor, origin, zoom);
             let hit = find_component_at(&cc.placed_components, cp);
             if let Some(idx) = hit {
-                cc.palette_selection = None; cc.selected_index = Some(idx);
-                state.status_message = format!("Selected {}", cc.placed_components[idx].component_type.name());
+                if cc.selected_index == Some(idx) {
+                    cc.selected_index = None;
+                } else {
+                    cc.palette_selection = None;
+                    cc.selected_index = Some(idx);
+                    state.status_message = format!("Selected {}", cc.placed_components[idx].component_type.name());
+                }
             } else if let Some(ct) = cc.palette_selection {
-                cc.place_component(ct, snap(cp, GRID_SPACING)); cc.palette_selection = None;
+                cc.place_component(ct, snap(cp, GRID_SPACING));
+                cc.palette_selection = None;
                 state.status_message = format!("Placed {}", ct.name());
-            } else { cc.selected_index = None; }
+            } else {
+                cc.selected_index = None;
+                cc.palette_selection = None;
+            }
             ui.ctx().request_repaint();
         }
     }
 
+    // ── Right-click to delete ──
     if response.clicked_by(egui::PointerButton::Secondary) {
         if let Some(cursor) = response.interact_pointer_pos() {
             let cp = screen_to_element(cursor, origin, zoom);
             if let Some(idx) = find_component_at(&cc.placed_components, cp) {
-                cc.selected_index = Some(idx); cc.delete_selected();
-                state.status_message = "Component deleted".to_owned(); ui.ctx().request_repaint();
+                cc.selected_index = Some(idx);
+                cc.delete_selected();
+                state.status_message = "Component deleted".to_owned();
+                ui.ctx().request_repaint();
             }
         }
     }
 
+    // ── Draw grid ──
     draw_grid(&painter, origin, response.rect, zoom, colors);
 
-    if let Some(si) = cc.selected_index {
-        if si < cc.placed_components.len() {
-            let ct = cc.placed_components[si].component_type;
-            if ct.is_editable() && !ct.is_plot() { draw_editable_ui(ui, si, cc, origin, zoom, &response.rect, colors); }
-        }
-    }
-
+    // ── Draw all placed components (non-plot) ──
     for (idx, comp) in cc.placed_components.iter().enumerate() {
         if comp.component_type.is_plot() { continue; }
         let sel = cc.selected_index == Some(idx);
-        if sel && comp.component_type.is_editable() { continue; }
         draw_component_block(&painter, comp, origin, zoom, sel, cc.get_value(comp.component_type), colors);
     }
 
+    // ── Draw plots ──
     for (idx, comp) in cc.placed_components.iter().enumerate() {
         if !comp.component_type.is_plot() { continue; }
         let sel = cc.selected_index == Some(idx);
@@ -307,42 +304,51 @@ fn handle_canvas(ui: &mut Ui, state: &mut AppState, colors: &ThemeColors) {
         }
     }
 
-    if let Some(ct) = cc.palette_selection {
-        if let Some(cursor) = response.hover_pos() {
-            let sn = snap(screen_to_element(cursor, origin, zoom), GRID_SPACING);
-            let (r, l) = if ct.is_plot() { (plot_block_rect(sn, origin, zoom), "📈 Plot".to_owned()) }
-                else { (block_rect(sn, origin, zoom), format!("{}: {}", ct.name(), format_eng_small(cc.get_value(ct), ct.unit()))) };
-            painter.rect_stroke(r, CornerRadius::same(4), Stroke::new(1.5, palette::ACCENT_LIGHT), egui::StrokeKind::Outside);
-            painter.rect_filled(r, CornerRadius::same(4), Color32::from_rgba_premultiplied(99, 130, 255, 20));
-            painter.text(r.center(), Align2::CENTER_CENTER, &l, egui::TextStyle::Monospace.resolve(ui.style()), palette::ACCENT_LIGHT);
+    // ── Inline editor for selected editable component ──
+    if let Some(si) = cc.selected_index {
+        if si < cc.placed_components.len() {
+            let ct = cc.placed_components[si].component_type;
+            if ct.is_editable() && !ct.is_plot() {
+                draw_editable_ui(ui, si, cc, origin, zoom, &response.rect, colors);
+            }
         }
     }
 
+    // ── Ghost preview when palette selection is active ──
+    if let Some(ct) = cc.palette_selection {
+        if let Some(cursor) = response.hover_pos() {
+            let sn = snap(screen_to_element(cursor, origin, zoom), GRID_SPACING);
+            let (r, label) = if ct.is_plot() {
+                (plot_block_rect(sn, origin, zoom), "Plot".to_owned())
+            } else {
+                (block_rect(sn, origin, zoom), format!("{}: {}", ct.name(), format_eng_small(cc.get_value(ct), ct.unit())))
+            };
+            // Ghost outline
+            painter.rect_stroke(r, CornerRadius::same(4), Stroke::new(2.0, palette::ACCENT_LIGHT), egui::StrokeKind::Outside);
+            painter.rect_filled(r, CornerRadius::same(4), Color32::from_rgba_premultiplied(99, 130, 255, 30));
+            // Preview label pill
+            let label_text = format!("{}", label);
+            let galley = painter.layout_no_wrap(label_text, egui::FontId::monospace(10.0), palette::ACCENT_LIGHT);
+            let label_pt = Pos2::new(r.center().x, r.max.y + 16.0 * zoom);
+            let label_rect = Rect::from_center_size(label_pt, Vec2::new(galley.rect.width() + 12.0, galley.rect.height() + 6.0));
+            painter.rect_filled(label_rect, CornerRadius::same(8), colors.label_bg);
+            painter.text(label_pt, Align2::CENTER_CENTER, &label, egui::FontId::monospace(10.0), palette::ACCENT_LIGHT);
+        }
+    }
+
+    // ── Status bar ──
     painter.text(Pos2::new(response.rect.min.x + 12.0, response.rect.max.y - 12.0), Align2::LEFT_BOTTOM,
-        format!("{} components  ·  {:.0}% zoom  ·  Click to place  ·  Right-click to delete  ·  Scroll to zoom", cc.placed_components.len(), cc.zoom * 100.0),
+        format!("{} components \u{b7} {:.0}% zoom \u{b7} Click to place \u{b7} Right-click to delete \u{b7} Scroll to zoom",
+            cc.placed_components.len(), cc.zoom * 100.0),
         egui::TextStyle::Monospace.resolve(&egui::Style::default()), colors.status);
 }
 
-// ── Inline editor ─────────────────────────────────────────────────────
-
+// ── Inline editor ──
 fn draw_editable_ui(ui: &mut Ui, idx: usize, cc: &mut crate::app::state::ComponentCanvasState, origin: Pos2, zoom: f32, canvas_rect: &Rect, colors: &ThemeColors) {
     let comp = &cc.placed_components[idx];
     let rect = block_rect(comp.pos, origin, zoom);
-    let clip = rect.intersect(*canvas_rect);
-    if !clip.is_positive() { return; }
+    if !rect.intersect(*canvas_rect).is_positive() { return; }
     let ct = comp.component_type;
-
-    let mut cu = ui.new_child(egui::UiBuilder::new()
-        .max_rect(egui::Rect::from_min_size(clip.min, Vec2::new(clip.size().x, clip.size().y)))
-        .layout(egui::Layout::top_down_justified(egui::Align::Center)));
-    let p = cu.painter();
-
-    p.rect_filled(Rect::from_min_size(Pos2::ZERO, clip.size()), CornerRadius::same(8), colors.input_bg);
-    p.rect_filled(Rect::from_min_size(Pos2::ZERO, Vec2::new(clip.size().x, 3.0)), CornerRadius::same(2), palette::ACCENT);
-    p.rect_stroke(Rect::from_min_size(Pos2::ZERO, clip.size()), CornerRadius::same(8), Stroke::new(2.0, palette::SELECTED), egui::StrokeKind::Outside);
-
-    cu.add_space(4.0);
-    cu.label(egui::RichText::new(ct.name()).color(colors.text_primary).monospace().size(11.0).strong());
 
     let (lo, hi, spd, sfx) = match ct {
         CanvasComponentType::Vin => (1.0, 500.0, 1.0, "V"),
@@ -355,56 +361,87 @@ fn draw_editable_ui(ui: &mut Ui, idx: usize, cc: &mut crate::app::state::Compone
         _ => return,
     };
 
-    // Always start from the current shared value so slider + input stay in sync
+    // Editor panel: right below the component block
+    let editor_w = rect.width().max(140.0);
+    let editor_h = 52.0;
+    let editor_rect = Rect::from_center_size(Pos2::new(rect.center().x, rect.max.y + 4.0 + editor_h / 2.0), Vec2::new(editor_w, editor_h));
+
+    let clip = editor_rect.intersect(*canvas_rect);
+    if !clip.is_positive() { return; }
+
+    let p = ui.painter();
+    p.rect_filled(editor_rect, CornerRadius::same(6), colors.card_bg);
+    p.rect_stroke(editor_rect, CornerRadius::same(6), Stroke::new(1.0, colors.input_border), egui::StrokeKind::Outside);
+
+    // Child UI for interactive controls
+    let mut cu = ui.new_child(egui::UiBuilder::new()
+        .max_rect(egui::Rect::from_min_size(editor_rect.min, editor_rect.size()))
+        .layout(egui::Layout::top_down_justified(egui::Align::Center)));
+
     let mut v = cc.get_value(ct);
+
+    cu.add_space(2.0);
+    cu.horizontal(|ui| {
+        ui.add_space(6.0);
+        ui.label(egui::RichText::new(ct.name()).color(colors.text_primary).size(9.0).monospace().strong());
+        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            ui.add_space(4.0);
+            if ui.add(egui::DragValue::new(&mut v).speed(spd).range(lo..=hi).suffix(sfx).prefix("= ")).changed() {
+                cc.set_value(ct, v);
+                ui.ctx().request_repaint();
+            }
+        });
+    });
 
     if cu.add(egui::Slider::new(&mut v, lo..=hi).suffix(sfx).show_value(false).clamping(egui::SliderClamping::Never)).changed() {
         cc.set_value(ct, v);
         cu.ctx().request_repaint();
     }
 
-    cu.horizontal(|ui| {
-        ui.add_space(8.0);
-        ui.label(egui::RichText::new("=").color(colors.text_secondary).monospace());
-        if ui.add(egui::DragValue::new(&mut v).speed(spd).suffix(sfx)).changed() {
-            cc.set_value(ct, v);
-            ui.ctx().request_repaint();
-        }
-    });
+    cu.add_space(0.0);
+    cu.label(egui::RichText::new(format!("L {}  C {}",
+        format_eng_small(cc.shared_params.calc_inductance(), "H"),
+        format_eng_small(cc.shared_params.calc_capacitance(), "F")))
+        .color(colors.text_value).size(8.0).monospace());
 
-    cu.add_space(2.0);
-    cu.label(egui::RichText::new(format!("L {}  C {}", format_eng_small(cc.shared_params.calc_inductance(), "H"), format_eng_small(cc.shared_params.calc_capacitance(), "F")))
-        .color(colors.text_value).size(9.0).monospace());
     if cu.ctx().is_pointer_over_egui() { cu.ctx().request_repaint(); }
 }
 
-// ── Static block ──────────────────────────────────────────────────────
-
+// ── Component block drawing ──
+// All painter-based, labels always move with the component in grid space.
 fn draw_component_block(painter: &egui::Painter, component: &crate::app::state::PlacedComponent, origin: Pos2, zoom: f32, selected: bool, value: f64, colors: &ThemeColors) {
     let rect = block_rect(component.pos, origin, zoom);
-    let edit = component.component_type.is_editable();
-    let bg = if edit { colors.input_bg } else { colors.computed_bg };
-    let bc = if selected { palette::SELECTED } else if edit { colors.input_border } else { colors.computed_border };
-    let accent = if edit { palette::ACCENT } else { palette::ACCENT_DIM };
+    let ct = component.component_type;
+    let bg = if ct.is_editable() { colors.input_bg } else { colors.computed_bg };
+    let bc = if selected { palette::SELECTED } else if ct.is_editable() { colors.input_border } else { colors.computed_border };
+    let accent = if ct.is_editable() { palette::ACCENT } else { palette::ACCENT_DIM };
 
+    // Background
     painter.rect_filled(rect, CornerRadius::same(8), bg);
+    // Top accent bar (always visible)
     painter.rect_filled(Rect::from_min_size(Pos2::new(rect.min.x, rect.min.y), Vec2::new(rect.width(), 3.0)), CornerRadius::same(2), accent);
+    // Border
     painter.rect_stroke(rect, CornerRadius::same(8), Stroke::new(if selected { 2.0 } else { 1.0 }, bc), egui::StrokeKind::Outside);
 
-    painter.text(Pos2::new(rect.min.x + 8.0, rect.min.y + 10.0), Align2::LEFT_TOP, component.component_type.name(),
-        egui::TextStyle::Monospace.resolve(&egui::Style::default()), colors.text_primary);
-    painter.text(Pos2::new(rect.center().x, rect.max.y - 10.0), Align2::CENTER_BOTTOM, &format_eng_small(value, component.component_type.unit()),
-        egui::TextStyle::Monospace.resolve(&egui::Style::default()), if selected { palette::SELECTED } else { colors.text_value });
+    // ── Labels (always visible, painter-based, move with the component) ──
+    painter.text(Pos2::new(rect.min.x + 8.0, rect.min.y + 10.0), Align2::LEFT_TOP, ct.name(),
+        egui::FontId::monospace(11.0), colors.text_primary);
 
-    if edit && !selected {
+    painter.text(Pos2::new(rect.center().x, rect.center().y + 4.0), Align2::CENTER_CENTER,
+        &format_eng_small(value, ct.unit()),
+        egui::FontId::monospace(13.0), colors.text_value);
+
+    painter.text(Pos2::new(rect.right() - 6.0, rect.max.y - 6.0), Align2::RIGHT_BOTTOM, ct.unit(),
+        egui::FontId::monospace(9.0), colors.text_secondary);
+
+    if ct.is_editable() && !selected {
         painter.text(Pos2::new(rect.right() - 4.0, rect.min.y + 10.0), Align2::RIGHT_TOP, "click",
-            egui::TextStyle::Monospace.resolve(&egui::Style::default()),
+            egui::FontId::monospace(9.0),
             Color32::from_rgba_premultiplied(colors.text_secondary.r(), colors.text_secondary.g(), colors.text_secondary.b(), 80));
     }
 }
 
-// ── Plot ──────────────────────────────────────────────────────────────
-
+// ── Plot ──
 fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Theme) {
     let l = params.calc_inductance();
     let c_val = params.calc_capacitance();
@@ -413,11 +450,9 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Them
     let vin = params.vin;
     let vout = params.vout;
     let iout_max = params.iout_max;
-    let _dil_pct = params.delta_il;
 
-    // Show a few switching cycles in time domain
     let period = if f > 0.0 { 1.0 / f } else { 1e-5 };
-    let t_end = 4.0 * period; // show 4 switching cycles
+    let t_end = 4.0 * period;
     let n_pts = 400;
     let dt = t_end / n_pts as f64;
 
@@ -425,18 +460,11 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Them
     let mut vc_wave: Vec<[f64; 2]> = Vec::with_capacity(n_pts + 1);
     let mut switch_wave: Vec<[f64; 2]> = Vec::with_capacity(n_pts + 1);
 
-    // Steady-state approximate initial conditions for a buck converter
-    // iL_avg = Iout ≈ Vout / Rload (use iout_max as proxy for nominal)
-    // ΔiL_pp = (Vin - Vout) * D / (L * f)  — ripple peak-to-peak
     let il_avg = iout_max;
     let rip_amps = if l > 0.0 && f > 0.0 {
         ((vin - vout) * d) / (l * f)
-    } else {
-        0.0
-    };
+    } else { 0.0 };
     let il_initial = il_avg - rip_amps / 2.0;
-
-    // Output voltage steady-state ≈ Vout, with small ripple
     let vc_initial = vout;
 
     let mut il = il_initial;
@@ -445,11 +473,8 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Them
     for i in 0..=n_pts {
         let t = i as f64 * dt;
         let phase = (t % period) / period;
-        let s = if phase < d { 1.0 } else { 0.0 };
 
-        // Simple piecewise-linear integration for buck converter:
-        // ON:  diL/dt = (Vin - Vc) / L , dvC/dt = (iL - Vc/R) / C
-        // OFF: diL/dt = -Vc / L        , dvC/dt = (iL - Vc/R) / C
+        let s = if phase < d { 1.0 } else { 0.0 };
         if l > 0.0 {
             let dil_dt = (s * vin - vc) / l;
             il += dil_dt * dt;
@@ -458,16 +483,13 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Them
             let dvc_dt = (il - vc / (vout / iout_max.max(0.01))) / c_val;
             vc += dvc_dt * dt;
         }
-
-        // Convert time to μs or ms for display
         let t_display = if t_end >= 1e-3 { t * 1e3 } else { t * 1e6 };
-
         il_wave.push([t_display, il]);
         vc_wave.push([t_display, vc]);
-        switch_wave.push([t_display, s * il_avg * 1.2]); // scaled switch state for visibility
+        switch_wave.push([t_display, s * il_avg * 1.2]);
     }
 
-    let t_unit = if t_end >= 1e-3 { "ms" } else { "μs" };
+    let t_unit = if t_end >= 1e-3 { "ms" } else { "\u{3bc}s" };
 
     Plot::new("canvas_plot").legend(Legend::default())
         .height(ui.available_height().max(100.0)).width(ui.available_width().max(150.0))
@@ -480,8 +502,7 @@ fn draw_plot(ui: &mut Ui, params: &crate::app::state::SharedParams, _theme: Them
         });
 }
 
-// ── Keyboard ──────────────────────────────────────────────────────────
-
+// ── Keyboard ──
 fn handle_keyboard(ui: &mut Ui, state: &mut AppState) {
     let cc = &mut state.component_canvas;
     if ui.input(|i| i.key_pressed(egui::Key::Delete) || i.key_pressed(egui::Key::Backspace)) && cc.selected_index.is_some() {
@@ -491,8 +512,7 @@ fn handle_keyboard(ui: &mut Ui, state: &mut AppState) {
     }
 }
 
-// ── Geometry & Helpers ────────────────────────────────────────────────
-
+// ── Geometry & Helpers ──
 fn block_rect(pos: Pos, origin: Pos2, zoom: f32) -> Rect {
     Rect::from_min_size(Pos2::new(origin.x + pos.x * zoom, origin.y + pos.y * zoom), Vec2::new(BLOCK_W * zoom, BLOCK_H * zoom))
 }
@@ -500,10 +520,30 @@ fn plot_block_rect(pos: Pos, origin: Pos2, zoom: f32) -> Rect {
     Rect::from_min_size(Pos2::new(origin.x + pos.x * zoom, origin.y + pos.y * zoom), Vec2::new(PLOT_BLOCK_W * zoom, PLOT_BLOCK_H * zoom))
 }
 fn draw_grid(painter: &egui::Painter, origin: Pos2, rect: Rect, zoom: f32, colors: &ThemeColors) {
-    let gs = GRID_SPACING * zoom; let mut x = (origin.x % gs) - gs;
-    while x < rect.max.x { painter.line_segment([Pos2::new(x, rect.min.y), Pos2::new(x, rect.max.y)], Stroke::new(0.5, colors.grid)); x += gs; }
+    let gs = GRID_SPACING * zoom;
+    // Thin minor grid lines
+    let mut x = (origin.x % gs) - gs;
+    while x < rect.max.x {
+        painter.line_segment([Pos2::new(x, rect.min.y), Pos2::new(x, rect.max.y)], Stroke::new(0.5, colors.grid));
+        x += gs;
+    }
     let mut y = (origin.y % gs) - gs;
-    while y < rect.max.y { painter.line_segment([Pos2::new(rect.min.x, y), Pos2::new(rect.max.x, y)], Stroke::new(0.5, colors.grid)); y += gs; }
+    while y < rect.max.y {
+        painter.line_segment([Pos2::new(rect.min.x, y), Pos2::new(rect.max.x, y)], Stroke::new(0.5, colors.grid));
+        y += gs;
+    }
+    // Thicker major grid lines every 5th
+    let major_gs = gs * 5.0;
+    let mut xm = (origin.x % major_gs) - major_gs;
+    while xm < rect.max.x {
+        painter.line_segment([Pos2::new(xm, rect.min.y), Pos2::new(xm, rect.max.y)], Stroke::new(1.0, colors.grid_major));
+        xm += major_gs;
+    }
+    let mut ym = (origin.y % major_gs) - major_gs;
+    while ym < rect.max.y {
+        painter.line_segment([Pos2::new(rect.min.x, ym), Pos2::new(rect.max.x, ym)], Stroke::new(1.0, colors.grid_major));
+        ym += major_gs;
+    }
 }
 fn screen_to_element(screen: Pos2, origin: Pos2, zoom: f32) -> Pos {
     Pos::new((screen.x - origin.x) / zoom, (screen.y - origin.y) / zoom)
@@ -515,13 +555,12 @@ fn find_component_at(components: &[crate::app::state::PlacedComponent], point: P
     }
     None
 }
-fn snap(pos: Pos, grid: f32) -> Pos { Pos::new((pos.x /
-grid).round() * grid, (pos.y / grid).round() * grid) }
+fn snap(pos: Pos, grid: f32) -> Pos { Pos::new((pos.x / grid).round() * grid, (pos.y / grid).round() * grid) }
 fn format_value(value: f64, unit: &str) -> String {
     let av = value.abs();
     if av == 0.0 { return format!("0 {}", unit); }
     let (scaled, prefix) = if av >= 1_000_000.0 { (value / 1_000_000.0, "M") } else if av >= 1_000.0 { (value / 1_000.0, "k") }
-    else if av >= 1.0 { (value, "") } else if av >= 0.001 { (value * 1_000.0, "m") } else if av >= 0.000_001 { (value * 1_000_000.0, "μ") }
+    else if av >= 1.0 { (value, "") } else if av >= 0.001 { (value * 1_000.0, "m") } else if av >= 0.000_001 { (value * 1_000_000.0, "\u{3bc}") }
     else if av >= 1e-9 { (value * 1e9, "n") } else { (value * 1e12, "p") };
     let dec = if scaled.abs() >= 100.0 { 1 } else if scaled.abs() >= 10.0 { 2 } else { 3 };
     format!("{:.prec$} {}{}", scaled, prefix, unit, prec = dec)

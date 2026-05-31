@@ -68,10 +68,7 @@ set(SOURCES
 
     # UI
     src/ui/MainFrame.cpp
-    src/ui/ParamPanel.cpp
-    src/ui/ResultPanel.cpp
-    src/ui/SchematicPanel.cpp
-    src/ui/PlotPanel.cpp
+    src/ui/CanvasPanel.cpp
 
     # Utilities
     src/utils/Formatting.cpp
@@ -107,10 +104,7 @@ set(HEADERS
     src/schematic/ExportSvg.h
 
     src/ui/MainFrame.h
-    src/ui/ParamPanel.h
-    src/ui/ResultPanel.h
-    src/ui/SchematicPanel.h
-    src/ui/PlotPanel.h
+    src/ui/CanvasPanel.h
 
     src/utils/Formatting.h
     src/utils/Theme.h

@@ -2,15 +2,8 @@
 
 #include "app/AppState.h"
 #include "app/Persistence.h"
-#include "ui/ParamPanel.h"
-#include "ui/ResultPanel.h"
-#include "ui/SchematicPanel.h"
-#include "ui/PlotPanel.h"
-
+#include "ui/CanvasPanel.h"
 #include <wx/frame.h>
-#include <wx/panel.h>
-#include <wx/sizer.h>
-#include <wx/splitter.h>
 #include <wx/statusbr.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
@@ -23,19 +16,11 @@ public:
 
 private:
     AppState m_state;
-
-    wxSplitterWindow* m_main_splitter = nullptr;
-    ParamPanel* m_param_panel = nullptr;
-    SchematicPanel* m_schematic_panel = nullptr;
-    PlotPanel* m_plot_panel = nullptr;
-    ResultPanel* m_result_panel = nullptr;
+    CanvasPanel* m_canvas = nullptr;
 
     void OnFileSave(wxCommandEvent&);
     void OnFileLoad(wxCommandEvent&);
-    void OnFileExportSvg(wxCommandEvent&);
-    void OnParamChanged(wxCommandEvent&);
-    void OnConverterChanged(wxCommandEvent&);
-    void RefreshAll();
+    void OnThemeToggle(wxCommandEvent&);
 
     wxDECLARE_EVENT_TABLE();
 };

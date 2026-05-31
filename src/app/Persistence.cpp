@@ -1,6 +1,5 @@
 #include "Persistence.h"
 #include "schematic/ExportSvg.h"
-
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
@@ -9,118 +8,88 @@ using json = nlohmann::json;
 
 namespace persistence {
 
-static json to_json(const ConverterParams& p) {
+static json to_json(const SharedParams& sp) {
     return {
-        {"vin", p.vin},
-        {"vout_target", p.vout_target},
-        {"frequency", p.frequency},
-        {"duty_cycle", p.duty_cycle},
-        {"inductance", p.inductance},
-        {"capacitance", p.capacitance},
-        {"load_resistance", p.load_resistance},
-        {"modulation_index", p.modulation_index},
-        {"output_frequency", p.output_frequency}
+        {"vin", sp.vin}, {"vout", sp.vout}, {"duty_cycle", sp.duty_cycle},
+        {"frequency", sp.frequency}, {"delta_il", sp.delta_il},
+        {"iout_max", sp.iout_max}, {"delta_vo", sp.delta_vo}
     };
 }
-
-static void from_json(const json& j, ConverterParams& p) {
-    if (j.contains("vin"))                p.vin = j["vin"].get<double>();
-    if (j.contains("vout_target"))        p.vout_target = j["vout_target"].get<double>();
-    if (j.contains("frequency"))           p.frequency = j["frequency"].get<double>();
-    if (j.contains("duty_cycle"))          p.duty_cycle = j["duty_cycle"].get<double>();
-    if (j.contains("inductance"))          p.inductance = j["inductance"].get<double>();
-    if (j.contains("capacitance"))         p.capacitance = j["capacitance"].get<double>();
-    if (j.contains("load_resistance"))     p.load_resistance = j["load_resistance"].get<double>();
-    if (j.contains("modulation_index"))    p.modulation_index = j["modulation_index"].get<double>();
-    if (j.contains("output_frequency"))    p.output_frequency = j["output_frequency"].get<double>();
+static void from_json(const json& j, SharedParams& sp) {
+    if (j.contains("vin"))         sp.vin = j["vin"].get<double>();
+    if (j.contains("vout"))        sp.vout = j["vout"].get<double>();
+    if (j.contains("duty_cycle"))  sp.duty_cycle = j["duty_cycle"].get<double>();
+    if (j.contains("frequency"))   sp.frequency = j["frequency"].get<double>();
+    if (j.contains("delta_il"))    sp.delta_il = j["delta_il"].get<double>();
+    if (j.contains("iout_max"))    sp.iout_max = j["iout_max"].get<double>();
+    if (j.contains("delta_vo"))    sp.delta_vo = j["delta_vo"].get<double>();
 }
 
-static json to_json(const ConverterResults& r) {
-    json j = {
-        {"vout", r.vout},
-        {"iout", r.iout},
-        {"iin", r.iin},
-        {"vout_ripple", r.vout_ripple},
-        {"il_ripple", r.il_ripple},
-        {"conduction_losses", r.conduction_losses},
-        {"switching_losses", r.switching_losses},
-        {"efficiency", r.efficiency}
+static json to_json(const CanvasState& cs) {
+    json components = json::array();
+    for (auto& c : cs.placed_components) {
+        components.push_back({
+            {"id", c.id},
+            {"type", static_cast<int>(c.component_type)},
+            {"x", c.pos.x}, {"y", c.pos.y}
+        });
+    }
+    return {
+        {"shared_params", to_json(cs.shared_params)},
+        {"components", components},
+        {"pan_x", cs.pan_x}, {"pan_y", cs.pan_y},
+        {"zoom", cs.zoom}, {"next_id", cs.next_id}
     };
-    if (r.thd)                     j["thd"] = *r.thd;
-    if (r.rms_output)              j["rms_output"] = *r.rms_output;
-    if (r.fundamental_amplitude)   j["fundamental_amplitude"] = *r.fundamental_amplitude;
-    return j;
 }
-
-static void from_json(const json& j, ConverterResults& r) {
-    if (j.contains("vout"))              r.vout = j["vout"].get<double>();
-    if (j.contains("iout"))              r.iout = j["iout"].get<double>();
-    if (j.contains("iin"))               r.iin = j["iin"].get<double>();
-    if (j.contains("vout_ripple"))       r.vout_ripple = j["vout_ripple"].get<double>();
-    if (j.contains("il_ripple"))         r.il_ripple = j["il_ripple"].get<double>();
-    if (j.contains("conduction_losses")) r.conduction_losses = j["conduction_losses"].get<double>();
-    if (j.contains("switching_losses"))  r.switching_losses = j["switching_losses"].get<double>();
-    if (j.contains("efficiency"))        r.efficiency = j["efficiency"].get<double>();
-    if (j.contains("thd") && !j["thd"].is_null()) r.thd = j["thd"].get<double>();
-    if (j.contains("rms_output") && !j["rms_output"].is_null()) r.rms_output = j["rms_output"].get<double>();
-    if (j.contains("fundamental_amplitude") && !j["fundamental_amplitude"].is_null())
-        r.fundamental_amplitude = j["fundamental_amplitude"].get<double>();
+static void from_json(const json& j, CanvasState& cs) {
+    if (j.contains("shared_params")) from_json(j["shared_params"], cs.shared_params);
+    if (j.contains("components")) {
+        cs.placed_components.clear();
+        for (auto& cj : j["components"]) {
+            PlacedComponent pc;
+            pc.id = cj["id"].get<uint64_t>();
+            pc.component_type = static_cast<CanvasComponentType>(cj["type"].get<int>());
+            pc.pos.x = cj["x"].get<float>();
+            pc.pos.y = cj["y"].get<float>();
+            cs.placed_components.push_back(pc);
+        }
+    }
+    if (j.contains("pan_x")) cs.pan_x = j["pan_x"].get<float>();
+    if (j.contains("pan_y")) cs.pan_y = j["pan_y"].get<float>();
+    if (j.contains("zoom"))  cs.zoom = j["zoom"].get<float>();
+    if (j.contains("next_id")) cs.next_id = j["next_id"].get<uint64_t>();
 }
 
 static json to_json(const AppState& state) {
     return {
-        {"active_converter", static_cast<int>(state.active_converter)},
-        {"params", to_json(state.params)},
-        {"results", to_json(state.results)},
-        {"show_numerical_sim", state.show_numerical_sim},
-        {"show_schematic", state.show_schematic},
         {"theme", (state.theme == Theme::Dark) ? "Dark" : "Light"},
-        {"status_message", state.status_message}
+        {"status_message", state.status_message},
+        {"canvas", to_json(state.canvas)}
     };
 }
-
 static void from_json(const json& j, AppState& state) {
-    if (j.contains("active_converter"))
-        state.active_converter = static_cast<ConverterType>(j["active_converter"].get<int>());
-    if (j.contains("params"))     from_json(j["params"], state.params);
-    if (j.contains("results"))    from_json(j["results"], state.results);
-    if (j.contains("show_numerical_sim")) state.show_numerical_sim = j["show_numerical_sim"].get<bool>();
-    if (j.contains("show_schematic"))     state.show_schematic = j["show_schematic"].get<bool>();
-    if (j.contains("theme"))              state.theme = (j["theme"].get<std::string>() == "Dark") ? Theme::Dark : Theme::Light;
-    if (j.contains("status_message"))     state.status_message = j["status_message"].get<std::string>();
+    if (j.contains("theme")) state.theme = (j["theme"].get<std::string>() == "Dark") ? Theme::Dark : Theme::Light;
+    if (j.contains("status_message")) state.status_message = j["status_message"].get<std::string>();
+    if (j.contains("canvas")) from_json(j["canvas"], state.canvas);
 }
 
 bool save_project(const std::string& path, const AppState& state) {
     try {
-        json j = to_json(state);
-        std::ofstream file(path);
-        if (!file.is_open()) {
-            std::cerr << "Failed to open " << path << " for writing\n";
-            return false;
-        }
-        file << j.dump(2);
+        std::ofstream f(path);
+        if (!f.is_open()) return false;
+        f << to_json(state).dump(2);
         return true;
-    } catch (const std::exception& e) {
-        std::cerr << "Error saving project: " << e.what() << "\n";
-        return false;
-    }
+    } catch (...) { return false; }
 }
 
 bool load_project(const std::string& path, AppState& state) {
     try {
-        std::ifstream file(path);
-        if (!file.is_open()) {
-            std::cerr << "Failed to open " << path << " for reading\n";
-            return false;
-        }
-        json j;
-        file >> j;
+        std::ifstream f(path);
+        if (!f.is_open()) return false;
+        json j; f >> j;
         from_json(j, state);
         return true;
-    } catch (const std::exception& e) {
-        std::cerr << "Error loading project: " << e.what() << "\n";
-        return false;
-    }
+    } catch (...) { return false; }
 }
 
 bool export_schematic_svg(const std::string& path,
@@ -128,18 +97,11 @@ bool export_schematic_svg(const std::string& path,
                           float width, float height)
 {
     try {
-        std::string svg = export_svg::export_svg(elements, width, height);
-        std::ofstream file(path);
-        if (!file.is_open()) {
-            std::cerr << "Failed to open " << path << " for SVG writing\n";
-            return false;
-        }
-        file << svg;
+        std::ofstream f(path);
+        if (!f.is_open()) return false;
+        f << export_svg::export_svg(elements, width, height);
         return true;
-    } catch (const std::exception& e) {
-        std::cerr << "Error exporting SVG: " << e.what() << "\n";
-        return false;
-    }
+    } catch (...) { return false; }
 }
 
 } // namespace persistence

@@ -107,12 +107,12 @@ _deps/nlohmann_json-build/clean:
 CMakeFiles/tupan.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 "Built target tupan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 "Built target tupan"
 .PHONY : CMakeFiles/tupan.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/tupan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/osogyian/Documents/tupan/build/CMakeFiles 27
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/osogyian/Documents/tupan/build/CMakeFiles 24
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tupan.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/osogyian/Documents/tupan/build/CMakeFiles 0
 .PHONY : CMakeFiles/tupan.dir/rule
@@ -124,7 +124,7 @@ tupan: CMakeFiles/tupan.dir/rule
 # codegen rule for target.
 CMakeFiles/tupan.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 "Finished codegen for target tupan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 "Finished codegen for target tupan"
 .PHONY : CMakeFiles/tupan.dir/codegen
 
 # clean rule for target.

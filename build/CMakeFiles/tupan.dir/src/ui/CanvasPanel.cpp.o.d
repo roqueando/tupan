@@ -1,6 +1,6 @@
-CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o: \
-  /Users/osogyian/Documents/tupan/src/ui/MainFrame.cpp \
-  /Users/osogyian/Documents/tupan/src/ui/MainFrame.h \
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o: \
+  /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp \
+  /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.h \
   /Users/osogyian/Documents/tupan/src/app/AppState.h \
   /Users/osogyian/Documents/tupan/src/domain/Types.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/optional \
@@ -769,9 +769,6 @@ CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wbuffer_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wstring_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/cstdarg \
-  /Users/osogyian/Documents/tupan/src/app/Persistence.h \
-  /Users/osogyian/Documents/tupan/src/schematic/Primitives.h \
-  /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.h \
   /Users/osogyian/Documents/tupan/src/utils/Theme.h \
   /opt/homebrew/include/wx-3.2/wx/colour.h \
   /opt/homebrew/include/wx-3.2/wx/defs.h \
@@ -957,38 +954,5 @@ CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__fwd/stack.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/print \
   /opt/homebrew/include/wx-3.2/wx/osx/textctrl.h \
-  /opt/homebrew/include/wx-3.2/wx/frame.h \
-  /opt/homebrew/include/wx-3.2/wx/toplevel.h \
-  /opt/homebrew/include/wx-3.2/wx/nonownedwnd.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/nonownedwnd.h \
-  /opt/homebrew/include/wx-3.2/wx/graphics.h \
-  /opt/homebrew/include/wx-3.2/wx/iconbndl.h \
-  /opt/homebrew/include/wx-3.2/wx/icon.h \
-  /opt/homebrew/include/wx-3.2/wx/iconloc.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/icon.h \
-  /opt/homebrew/include/wx-3.2/wx/weakref.h \
-  /opt/homebrew/include/wx-3.2/wx/meta/int2type.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/toplevel.h \
-  /opt/homebrew/include/wx-3.2/wx/statusbr.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/statusbr.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/statusbr.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/frame.h \
-  /opt/homebrew/include/wx-3.2/wx/toolbar.h \
-  /opt/homebrew/include/wx-3.2/wx/tbarbase.h \
-  /opt/homebrew/include/wx-3.2/wx/bmpbndl.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/toolbar.h \
-  /opt/homebrew/include/wx-3.2/wx/menu.h \
-  /opt/homebrew/include/wx-3.2/wx/menuitem.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/menuitem.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/menu.h \
-  /opt/homebrew/include/wx-3.2/wx/msgdlg.h \
-  /opt/homebrew/include/wx-3.2/wx/dialog.h \
-  /opt/homebrew/include/wx-3.2/wx/sharedptr.h \
-  /opt/homebrew/include/wx-3.2/wx/atomic.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/dialog.h \
-  /opt/homebrew/include/wx-3.2/wx/stockitem.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/msgdlgg.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/msgdlg.h \
-  /opt/homebrew/include/wx-3.2/wx/filedlg.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/filedlg.h \
-  /opt/homebrew/include/wx-3.2/wx/sizer.h
+  /Users/osogyian/Documents/tupan/src/utils/Formatting.h \
+  /opt/homebrew/include/wx-3.2/wx/dcclient.h

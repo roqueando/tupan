@@ -27,11 +27,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/osogyian/Documents/tupan/src/schematic/Renderer.cpp" "CMakeFiles/tupan.dir/src/schematic/Renderer.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/schematic/Renderer.cpp.o.d"
   "/Users/osogyian/Documents/tupan/src/simulation/CircuitOdes.cpp" "CMakeFiles/tupan.dir/src/simulation/CircuitOdes.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/simulation/CircuitOdes.cpp.o.d"
   "/Users/osogyian/Documents/tupan/src/simulation/Integrator.cpp" "CMakeFiles/tupan.dir/src/simulation/Integrator.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/simulation/Integrator.cpp.o.d"
+  "/Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp" "CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o.d"
   "/Users/osogyian/Documents/tupan/src/ui/MainFrame.cpp" "CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o.d"
-  "/Users/osogyian/Documents/tupan/src/ui/ParamPanel.cpp" "CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o.d"
-  "/Users/osogyian/Documents/tupan/src/ui/PlotPanel.cpp" "CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o.d"
-  "/Users/osogyian/Documents/tupan/src/ui/ResultPanel.cpp" "CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o.d"
-  "/Users/osogyian/Documents/tupan/src/ui/SchematicPanel.cpp" "CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o.d"
   "/Users/osogyian/Documents/tupan/src/utils/Formatting.cpp" "CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o.d"
   "/Users/osogyian/Documents/tupan/src/utils/Theme.cpp" "CMakeFiles/tupan.dir/src/utils/Theme.cpp.o" "gcc" "CMakeFiles/tupan.dir/src/utils/Theme.cpp.o.d"
   )

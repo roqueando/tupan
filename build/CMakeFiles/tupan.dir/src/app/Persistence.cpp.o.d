@@ -769,10 +769,9 @@ CMakeFiles/tupan.dir/src/app/Persistence.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wbuffer_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wstring_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/cstdarg \
-  /Users/osogyian/Documents/tupan/src/domain/converters/Buck.h \
-  /Users/osogyian/Documents/tupan/src/domain/converters/Boost.h \
-  /Users/osogyian/Documents/tupan/src/domain/inverter/VsiSingle.h \
-  /Users/osogyian/Documents/tupan/src/simulation/Integrator.h \
+  /Users/osogyian/Documents/tupan/src/schematic/Primitives.h \
+  /Users/osogyian/Documents/tupan/src/schematic/ExportSvg.h \
+  /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/json.hpp \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/functional \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binary_negate.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/bind.h \
@@ -797,77 +796,6 @@ CMakeFiles/tupan.dir/src/app/Persistence.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/default_searcher.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/not_fn.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/perfect_forward.h \
-  /Users/osogyian/Documents/tupan/src/simulation/CircuitOdes.h \
-  /Users/osogyian/Documents/tupan/src/utils/Theme.h \
-  /opt/homebrew/include/wx-3.2/wx/colour.h \
-  /opt/homebrew/include/wx-3.2/wx/defs.h \
-  /opt/homebrew/include/wx-3.2/wx/platform.h \
-  /opt/homebrew/include/wx-3.2/wx/compiler.h \
-  /opt/homebrew/lib/wx/include/osx_cocoa-unicode-3.2/wx/setup.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h \
-  /opt/homebrew/include/wx-3.2/wx/chkconf.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/chkconf.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/cocoa/chkconf.h \
-  /opt/homebrew/include/wx-3.2/wx/unix/chkconf.h \
-  /opt/homebrew/include/wx-3.2/wx/version.h \
-  /opt/homebrew/include/wx-3.2/wx/cpp.h \
-  /opt/homebrew/include/wx-3.2/wx/dlimpexp.h \
-  /opt/homebrew/include/wx-3.2/wx/types.h \
-  /opt/homebrew/include/wx-3.2/wx/debug.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_assert.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
-  /opt/homebrew/include/wx-3.2/wx/chartype.h \
-  /opt/homebrew/include/wx-3.2/wx/features.h \
-  /opt/homebrew/include/wx-3.2/wx/gdiobj.h \
-  /opt/homebrew/include/wx-3.2/wx/object.h \
-  /opt/homebrew/include/wx-3.2/wx/memory.h \
-  /opt/homebrew/include/wx-3.2/wx/string.h \
-  /opt/homebrew/include/wx-3.2/wx/wxcrtbase.h \
-  /opt/homebrew/include/wx-3.2/wx/strvararg.h \
-  /opt/homebrew/include/wx-3.2/wx/strconv.h \
-  /opt/homebrew/include/wx-3.2/wx/buffer.h \
-  /opt/homebrew/include/wx-3.2/wx/fontenc.h \
-  /opt/homebrew/include/wx-3.2/wx/unichar.h \
-  /opt/homebrew/include/wx-3.2/wx/stringimpl.h \
-  /opt/homebrew/include/wx-3.2/wx/beforestd.h \
-  /opt/homebrew/include/wx-3.2/wx/afterstd.h \
-  /opt/homebrew/include/wx-3.2/wx/stringops.h \
-  /opt/homebrew/include/wx-3.2/wx/iosfwrap.h \
-  /opt/homebrew/include/wx-3.2/wx/msgout.h \
-  /opt/homebrew/include/wx-3.2/wx/xti.h \
-  /opt/homebrew/include/wx-3.2/wx/rtti.h \
-  /opt/homebrew/include/wx-3.2/wx/flags.h \
-  /opt/homebrew/include/wx-3.2/wx/xti2.h \
-  /opt/homebrew/include/wx-3.2/wx/variant.h \
-  /opt/homebrew/include/wx-3.2/wx/arrstr.h \
-  /opt/homebrew/include/wx-3.2/wx/dynarray.h \
-  /opt/homebrew/include/wx-3.2/wx/vector.h \
-  /opt/homebrew/include/wx-3.2/wx/scopeguard.h \
-  /opt/homebrew/include/wx-3.2/wx/except.h \
-  /opt/homebrew/include/wx-3.2/wx/meta/movable.h \
-  /opt/homebrew/include/wx-3.2/wx/meta/pod.h \
-  /opt/homebrew/include/wx-3.2/wx/meta/if.h \
-  /opt/homebrew/include/wx-3.2/wx/list.h \
-  /opt/homebrew/include/wx-3.2/wx/longlong.h \
-  /opt/homebrew/include/wx-3.2/wx/datetime.h \
-  /opt/homebrew/include/wx-3.2/wx/anystr.h \
-  /opt/homebrew/include/wx-3.2/wx/any.h \
-  /opt/homebrew/include/wx-3.2/wx/typeinfo.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/colour.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/core/colour.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/core/cfref.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/unistd.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/unistd.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_posix_vdisable.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/select.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_select.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_uuid_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/gethostuuid.h \
-  /Users/osogyian/Documents/tupan/src/utils/Formatting.h \
-  /Users/osogyian/Documents/tupan/src/schematic/Primitives.h \
-  /Users/osogyian/Documents/tupan/src/schematic/ExportSvg.h \
-  /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/json.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/adl_serializer.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/abi_macros.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/conversions/from_json.hpp \
@@ -884,6 +812,9 @@ CMakeFiles/tupan.dir/src/app/Persistence.cpp.o: \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/meta/void_t.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/thirdparty/hedley/hedley.hpp \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/cassert \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_assert.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/string_escape.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/input/position_t.hpp \
   /Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-src/include/nlohmann/detail/meta/cpp_future.hpp \
@@ -920,6 +851,7 @@ CMakeFiles/tupan.dir/src/app/Persistence.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__ostream/basic_ostream.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/ostream \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/print \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/unistd.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__filesystem/operations.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__filesystem/perm_options.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__filesystem/space_info.h \

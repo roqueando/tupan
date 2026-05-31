@@ -585,6 +585,30 @@ src/simulation/Integrator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/simulation/Integrator.cpp.s
 .PHONY : src/simulation/Integrator.cpp.s
 
+src/ui/CanvasPanel.o: src/ui/CanvasPanel.cpp.o
+.PHONY : src/ui/CanvasPanel.o
+
+# target to build an object file
+src/ui/CanvasPanel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o
+.PHONY : src/ui/CanvasPanel.cpp.o
+
+src/ui/CanvasPanel.i: src/ui/CanvasPanel.cpp.i
+.PHONY : src/ui/CanvasPanel.i
+
+# target to preprocess a source file
+src/ui/CanvasPanel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.i
+.PHONY : src/ui/CanvasPanel.cpp.i
+
+src/ui/CanvasPanel.s: src/ui/CanvasPanel.cpp.s
+.PHONY : src/ui/CanvasPanel.s
+
+# target to generate assembly for a file
+src/ui/CanvasPanel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.s
+.PHONY : src/ui/CanvasPanel.cpp.s
+
 src/ui/MainFrame.o: src/ui/MainFrame.cpp.o
 .PHONY : src/ui/MainFrame.o
 
@@ -608,102 +632,6 @@ src/ui/MainFrame.s: src/ui/MainFrame.cpp.s
 src/ui/MainFrame.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.s
 .PHONY : src/ui/MainFrame.cpp.s
-
-src/ui/ParamPanel.o: src/ui/ParamPanel.cpp.o
-.PHONY : src/ui/ParamPanel.o
-
-# target to build an object file
-src/ui/ParamPanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o
-.PHONY : src/ui/ParamPanel.cpp.o
-
-src/ui/ParamPanel.i: src/ui/ParamPanel.cpp.i
-.PHONY : src/ui/ParamPanel.i
-
-# target to preprocess a source file
-src/ui/ParamPanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.i
-.PHONY : src/ui/ParamPanel.cpp.i
-
-src/ui/ParamPanel.s: src/ui/ParamPanel.cpp.s
-.PHONY : src/ui/ParamPanel.s
-
-# target to generate assembly for a file
-src/ui/ParamPanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.s
-.PHONY : src/ui/ParamPanel.cpp.s
-
-src/ui/PlotPanel.o: src/ui/PlotPanel.cpp.o
-.PHONY : src/ui/PlotPanel.o
-
-# target to build an object file
-src/ui/PlotPanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o
-.PHONY : src/ui/PlotPanel.cpp.o
-
-src/ui/PlotPanel.i: src/ui/PlotPanel.cpp.i
-.PHONY : src/ui/PlotPanel.i
-
-# target to preprocess a source file
-src/ui/PlotPanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.i
-.PHONY : src/ui/PlotPanel.cpp.i
-
-src/ui/PlotPanel.s: src/ui/PlotPanel.cpp.s
-.PHONY : src/ui/PlotPanel.s
-
-# target to generate assembly for a file
-src/ui/PlotPanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.s
-.PHONY : src/ui/PlotPanel.cpp.s
-
-src/ui/ResultPanel.o: src/ui/ResultPanel.cpp.o
-.PHONY : src/ui/ResultPanel.o
-
-# target to build an object file
-src/ui/ResultPanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o
-.PHONY : src/ui/ResultPanel.cpp.o
-
-src/ui/ResultPanel.i: src/ui/ResultPanel.cpp.i
-.PHONY : src/ui/ResultPanel.i
-
-# target to preprocess a source file
-src/ui/ResultPanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.i
-.PHONY : src/ui/ResultPanel.cpp.i
-
-src/ui/ResultPanel.s: src/ui/ResultPanel.cpp.s
-.PHONY : src/ui/ResultPanel.s
-
-# target to generate assembly for a file
-src/ui/ResultPanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.s
-.PHONY : src/ui/ResultPanel.cpp.s
-
-src/ui/SchematicPanel.o: src/ui/SchematicPanel.cpp.o
-.PHONY : src/ui/SchematicPanel.o
-
-# target to build an object file
-src/ui/SchematicPanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o
-.PHONY : src/ui/SchematicPanel.cpp.o
-
-src/ui/SchematicPanel.i: src/ui/SchematicPanel.cpp.i
-.PHONY : src/ui/SchematicPanel.i
-
-# target to preprocess a source file
-src/ui/SchematicPanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.i
-.PHONY : src/ui/SchematicPanel.cpp.i
-
-src/ui/SchematicPanel.s: src/ui/SchematicPanel.cpp.s
-.PHONY : src/ui/SchematicPanel.s
-
-# target to generate assembly for a file
-src/ui/SchematicPanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tupan.dir/build.make CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.s
-.PHONY : src/ui/SchematicPanel.cpp.s
 
 src/utils/Formatting.o: src/utils/Formatting.cpp.o
 .PHONY : src/utils/Formatting.o
@@ -819,21 +747,12 @@ help:
 	@echo "... src/simulation/Integrator.o"
 	@echo "... src/simulation/Integrator.i"
 	@echo "... src/simulation/Integrator.s"
+	@echo "... src/ui/CanvasPanel.o"
+	@echo "... src/ui/CanvasPanel.i"
+	@echo "... src/ui/CanvasPanel.s"
 	@echo "... src/ui/MainFrame.o"
 	@echo "... src/ui/MainFrame.i"
 	@echo "... src/ui/MainFrame.s"
-	@echo "... src/ui/ParamPanel.o"
-	@echo "... src/ui/ParamPanel.i"
-	@echo "... src/ui/ParamPanel.s"
-	@echo "... src/ui/PlotPanel.o"
-	@echo "... src/ui/PlotPanel.i"
-	@echo "... src/ui/PlotPanel.s"
-	@echo "... src/ui/ResultPanel.o"
-	@echo "... src/ui/ResultPanel.i"
-	@echo "... src/ui/ResultPanel.s"
-	@echo "... src/ui/SchematicPanel.o"
-	@echo "... src/ui/SchematicPanel.i"
-	@echo "... src/ui/SchematicPanel.s"
 	@echo "... src/utils/Formatting.o"
 	@echo "... src/utils/Formatting.i"
 	@echo "... src/utils/Formatting.s"

@@ -769,35 +769,9 @@ CMakeFiles/tupan.dir/src/main.cpp.o: \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wbuffer_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__locale_dir/wstring_convert.h \
   /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/cstdarg \
-  /Users/osogyian/Documents/tupan/src/domain/converters/Buck.h \
-  /Users/osogyian/Documents/tupan/src/domain/converters/Boost.h \
-  /Users/osogyian/Documents/tupan/src/domain/inverter/VsiSingle.h \
-  /Users/osogyian/Documents/tupan/src/simulation/Integrator.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/functional \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binary_negate.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/bind.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binder1st.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binder2nd.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/mem_fn.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/mem_fun_ref.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/pointer_to_binary_function.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/pointer_to_unary_function.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/unary_negate.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/function.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/strip_signature.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/boyer_moore_searcher.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/unordered_map \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/is_transparent.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__hash_table \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/can_extract_key.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/remove_const_ref.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__iterator/erase_if_container.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__iterator/ranges_iterator_traits.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__node_handle \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/default_searcher.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/not_fn.h \
-  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/perfect_forward.h \
-  /Users/osogyian/Documents/tupan/src/simulation/CircuitOdes.h \
+  /Users/osogyian/Documents/tupan/src/app/Persistence.h \
+  /Users/osogyian/Documents/tupan/src/schematic/Primitives.h \
+  /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.h \
   /Users/osogyian/Documents/tupan/src/utils/Theme.h \
   /opt/homebrew/include/wx-3.2/wx/colour.h \
   /opt/homebrew/include/wx-3.2/wx/defs.h \
@@ -833,6 +807,30 @@ CMakeFiles/tupan.dir/src/main.cpp.o: \
   /opt/homebrew/include/wx-3.2/wx/beforestd.h \
   /opt/homebrew/include/wx-3.2/wx/afterstd.h \
   /opt/homebrew/include/wx-3.2/wx/stringops.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/functional \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binary_negate.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/bind.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binder1st.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/binder2nd.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/mem_fn.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/mem_fun_ref.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/pointer_to_binary_function.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/pointer_to_unary_function.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/unary_negate.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/function.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/strip_signature.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/boyer_moore_searcher.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/unordered_map \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/is_transparent.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__hash_table \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/can_extract_key.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/remove_const_ref.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__iterator/erase_if_container.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__iterator/ranges_iterator_traits.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__node_handle \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/default_searcher.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/not_fn.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__functional/perfect_forward.h \
   /opt/homebrew/include/wx-3.2/wx/iosfwrap.h \
   /opt/homebrew/include/wx-3.2/wx/msgout.h \
   /opt/homebrew/include/wx-3.2/wx/xti.h \
@@ -864,10 +862,6 @@ CMakeFiles/tupan.dir/src/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_select.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_uuid_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/gethostuuid.h \
-  /Users/osogyian/Documents/tupan/src/utils/Formatting.h \
-  /Users/osogyian/Documents/tupan/src/app/Persistence.h \
-  /Users/osogyian/Documents/tupan/src/schematic/Primitives.h \
-  /Users/osogyian/Documents/tupan/src/ui/ParamPanel.h \
   /opt/homebrew/include/wx-3.2/wx/panel.h \
   /opt/homebrew/include/wx-3.2/wx/window.h \
   /opt/homebrew/include/wx-3.2/wx/event.h \
@@ -941,39 +935,28 @@ CMakeFiles/tupan.dir/src/main.cpp.o: \
   /opt/homebrew/include/wx-3.2/wx/geometry.h \
   /opt/homebrew/include/wx-3.2/wx/containr.h \
   /opt/homebrew/include/wx-3.2/wx/generic/panelg.h \
-  /opt/homebrew/include/wx-3.2/wx/slider.h \
+  /opt/homebrew/include/wx-3.2/wx/textctrl.h \
   /opt/homebrew/include/wx-3.2/wx/control.h \
   /opt/homebrew/include/wx-3.2/wx/osx/control.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/slider.h \
-  /opt/homebrew/include/wx-3.2/wx/compositewin.h \
-  /opt/homebrew/include/wx-3.2/wx/stattext.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/stattext.h \
-  /opt/homebrew/include/wx-3.2/wx/spinctrl.h \
-  /opt/homebrew/include/wx-3.2/wx/spinbutt.h \
-  /opt/homebrew/include/wx-3.2/wx/range.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/spinbutt.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/spinctlg.h \
-  /opt/homebrew/include/wx-3.2/wx/choice.h \
-  /opt/homebrew/include/wx-3.2/wx/ctrlsub.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/choice.h \
-  /opt/homebrew/include/wx-3.2/wx/checkbox.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/checkbox.h \
-  /opt/homebrew/include/wx-3.2/wx/button.h \
-  /opt/homebrew/include/wx-3.2/wx/anybutton.h \
-  /opt/homebrew/include/wx-3.2/wx/bmpbndl.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/anybutton.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/button.h \
-  /opt/homebrew/include/wx-3.2/wx/scrolwin.h \
-  /opt/homebrew/include/wx-3.2/wx/scrolbar.h \
-  /opt/homebrew/include/wx-3.2/wx/osx/scrolbar.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/scrolwin.h \
-  /opt/homebrew/include/wx-3.2/wx/recguard.h \
-  /Users/osogyian/Documents/tupan/src/ui/ResultPanel.h \
-  /opt/homebrew/include/wx-3.2/wx/sizer.h \
-  /Users/osogyian/Documents/tupan/src/ui/SchematicPanel.h \
-  /Users/osogyian/Documents/tupan/src/schematic/Layout.h \
-  /Users/osogyian/Documents/tupan/src/schematic/Renderer.h \
-  /Users/osogyian/Documents/tupan/src/ui/PlotPanel.h \
+  /opt/homebrew/include/wx-3.2/wx/textentry.h \
+  /opt/homebrew/include/wx-3.2/wx/osx/textentry.h \
+  /opt/homebrew/include/wx-3.2/wx/ioswrap.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/iostream \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/istream \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__ostream/basic_ostream.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__ostream/put_character_sequence.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/bitset \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__type_traits/is_char_like_type.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/ostream \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/format \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/queue \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__fwd/deque.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__fwd/queue.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/deque \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/stack \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/__fwd/stack.h \
+  /opt/homebrew/Cellar/llvm/21.1.0/bin/../include/c++/v1/print \
+  /opt/homebrew/include/wx-3.2/wx/osx/textctrl.h \
   /opt/homebrew/include/wx-3.2/wx/frame.h \
   /opt/homebrew/include/wx-3.2/wx/toplevel.h \
   /opt/homebrew/include/wx-3.2/wx/nonownedwnd.h \
@@ -992,9 +975,8 @@ CMakeFiles/tupan.dir/src/main.cpp.o: \
   /opt/homebrew/include/wx-3.2/wx/osx/frame.h \
   /opt/homebrew/include/wx-3.2/wx/toolbar.h \
   /opt/homebrew/include/wx-3.2/wx/tbarbase.h \
+  /opt/homebrew/include/wx-3.2/wx/bmpbndl.h \
   /opt/homebrew/include/wx-3.2/wx/osx/toolbar.h \
-  /opt/homebrew/include/wx-3.2/wx/splitter.h \
-  /opt/homebrew/include/wx-3.2/wx/generic/splitter.h \
   /opt/homebrew/include/wx-3.2/wx/menu.h \
   /opt/homebrew/include/wx-3.2/wx/menuitem.h \
   /opt/homebrew/include/wx-3.2/wx/osx/menuitem.h \

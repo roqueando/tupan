@@ -352,66 +352,24 @@ CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.s"
 	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/MainFrame.cpp -o CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.s
 
-CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o: CMakeFiles/tupan.dir/flags.make
-CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o: /Users/osogyian/Documents/tupan/src/ui/ParamPanel.cpp
-CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o -MF CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o.d -o CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o -c /Users/osogyian/Documents/tupan/src/ui/ParamPanel.cpp
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o: CMakeFiles/tupan.dir/flags.make
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o: /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o -MF CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o.d -o CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o -c /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp
 
-CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.i"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/osogyian/Documents/tupan/src/ui/ParamPanel.cpp > CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.i
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.i"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp > CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.i
 
-CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.s"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/ParamPanel.cpp -o CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.s
-
-CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o: CMakeFiles/tupan.dir/flags.make
-CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o: /Users/osogyian/Documents/tupan/src/ui/ResultPanel.cpp
-CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o -MF CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o.d -o CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o -c /Users/osogyian/Documents/tupan/src/ui/ResultPanel.cpp
-
-CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.i"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/osogyian/Documents/tupan/src/ui/ResultPanel.cpp > CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.i
-
-CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.s"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/ResultPanel.cpp -o CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.s
-
-CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o: CMakeFiles/tupan.dir/flags.make
-CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o: /Users/osogyian/Documents/tupan/src/ui/SchematicPanel.cpp
-CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o -MF CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o.d -o CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o -c /Users/osogyian/Documents/tupan/src/ui/SchematicPanel.cpp
-
-CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.i"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/osogyian/Documents/tupan/src/ui/SchematicPanel.cpp > CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.i
-
-CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.s"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/SchematicPanel.cpp -o CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.s
-
-CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o: CMakeFiles/tupan.dir/flags.make
-CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o: /Users/osogyian/Documents/tupan/src/ui/PlotPanel.cpp
-CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o -MF CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o.d -o CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o -c /Users/osogyian/Documents/tupan/src/ui/PlotPanel.cpp
-
-CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.i"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/osogyian/Documents/tupan/src/ui/PlotPanel.cpp > CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.i
-
-CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.s"
-	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/PlotPanel.cpp -o CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.s
+CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.s"
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/osogyian/Documents/tupan/src/ui/CanvasPanel.cpp -o CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.s
 
 CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o: CMakeFiles/tupan.dir/flags.make
 CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o: /Users/osogyian/Documents/tupan/src/utils/Formatting.cpp
 CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o"
 	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o -MF CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o.d -o CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o -c /Users/osogyian/Documents/tupan/src/utils/Formatting.cpp
 
 CMakeFiles/tupan.dir/src/utils/Formatting.cpp.i: cmake_force
@@ -425,7 +383,7 @@ CMakeFiles/tupan.dir/src/utils/Formatting.cpp.s: cmake_force
 CMakeFiles/tupan.dir/src/utils/Theme.cpp.o: CMakeFiles/tupan.dir/flags.make
 CMakeFiles/tupan.dir/src/utils/Theme.cpp.o: /Users/osogyian/Documents/tupan/src/utils/Theme.cpp
 CMakeFiles/tupan.dir/src/utils/Theme.cpp.o: CMakeFiles/tupan.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/tupan.dir/src/utils/Theme.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/tupan.dir/src/utils/Theme.cpp.o"
 	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tupan.dir/src/utils/Theme.cpp.o -MF CMakeFiles/tupan.dir/src/utils/Theme.cpp.o.d -o CMakeFiles/tupan.dir/src/utils/Theme.cpp.o -c /Users/osogyian/Documents/tupan/src/utils/Theme.cpp
 
 CMakeFiles/tupan.dir/src/utils/Theme.cpp.i: cmake_force
@@ -458,10 +416,7 @@ tupan_OBJECTS = \
 "CMakeFiles/tupan.dir/src/schematic/Renderer.cpp.o" \
 "CMakeFiles/tupan.dir/src/schematic/ExportSvg.cpp.o" \
 "CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o" \
-"CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o" \
-"CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o" \
-"CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o" \
-"CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o" \
+"CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o" \
 "CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o" \
 "CMakeFiles/tupan.dir/src/utils/Theme.cpp.o"
 
@@ -488,15 +443,12 @@ tupan: CMakeFiles/tupan.dir/src/schematic/Layout.cpp.o
 tupan: CMakeFiles/tupan.dir/src/schematic/Renderer.cpp.o
 tupan: CMakeFiles/tupan.dir/src/schematic/ExportSvg.cpp.o
 tupan: CMakeFiles/tupan.dir/src/ui/MainFrame.cpp.o
-tupan: CMakeFiles/tupan.dir/src/ui/ParamPanel.cpp.o
-tupan: CMakeFiles/tupan.dir/src/ui/ResultPanel.cpp.o
-tupan: CMakeFiles/tupan.dir/src/ui/SchematicPanel.cpp.o
-tupan: CMakeFiles/tupan.dir/src/ui/PlotPanel.cpp.o
+tupan: CMakeFiles/tupan.dir/src/ui/CanvasPanel.cpp.o
 tupan: CMakeFiles/tupan.dir/src/utils/Formatting.cpp.o
 tupan: CMakeFiles/tupan.dir/src/utils/Theme.cpp.o
 tupan: CMakeFiles/tupan.dir/build.make
 tupan: CMakeFiles/tupan.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Linking CXX executable tupan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/osogyian/Documents/tupan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Linking CXX executable tupan"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tupan.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -23,11 +23,8 @@ impl TupanApp {
 impl eframe::App for TupanApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let is_dark = self.state.theme == state::Theme::Dark;
-        if is_dark {
-            ui.visuals_mut().dark_mode = true;
-        } else {
-            ui.visuals_mut().dark_mode = false;
-        }
+        // Use set_theme to switch the global context theme (not just local visuals)
+        ui.ctx().set_theme(if is_dark { egui::Theme::Dark } else { egui::Theme::Light });
 
         let tokens = ui.tokens();
 

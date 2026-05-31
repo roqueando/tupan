@@ -1,0 +1,5 @@
+/Users/osogyian/Documents/tupan/build/CMakeFiles/tupan.dir
+/Users/osogyian/Documents/tupan/build/CMakeFiles/edit_cache.dir
+/Users/osogyian/Documents/tupan/build/CMakeFiles/rebuild_cache.dir
+/Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-build/CMakeFiles/edit_cache.dir
+/Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/osogyian/Documents/tupan/build/cmake_install.cmake",
+		"/Users/osogyian/Documents/tupan/build/_deps/nlohmann_json-build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

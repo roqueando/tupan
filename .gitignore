@@ -1,2 +1,21 @@
+# Rust (legacy)
 /target/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+poetry.lock
+
+# Build outputs
+dist/
+*.bin
+*.exe
+*.app
+
+# Project files
 *.tupan.json
+*.tupan.json.bak
+
+# macOS
+.DS_Store

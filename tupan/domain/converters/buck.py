@@ -38,9 +38,8 @@ class BuckStrategy(ConverterStrategy):
         iout_max = params.iout_max
 
         delta_il_amps = params.delta_il_pct * iout_max
-        delta_vo_volts = params.delta_vo_pct
+        delta_vo_volts = params.delta_vo_pct * vout
 
-        r_load = self._output_current(vout, iout_max) if iout_max > 0 else 10.0
         if iout_max > 0:
             r_load = vout / iout_max
         else:

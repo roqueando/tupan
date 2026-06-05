@@ -1,96 +1,149 @@
-# Tupan ⚡
+# Tupan ⚡ — Power Electronics Workbench
 
-**Interactive Power Electronics Workbench** — built with Rust + egui.
+**Design buck converters visually.** Turn knobs, see component values and waveforms update in real time. No coding required.
 
-Tupan is a desktop application for electrical engineering, focused on power electronics. It provides an interactive visual environment where you can adjust circuit parameters with sliders and see schematics, plots, and metrics update in real time — no coding required.
+Download the latest release for your OS, double-click, and start designing.
 
-## Features
-
-### Supported Converters
-- **Buck Converter** — step-down DC-DC with full analytical model
-- **Boost Converter** — step-up DC-DC with full analytical model
-- **Single-Phase VSI** — voltage source inverter with sine-triangle PWM
-
-### Real-Time Calculations
-Every parameter change instantly recalculates:
-- Output voltage and current
-- Inductor current ripple (peak-to-peak)
-- Output voltage ripple (peak-to-peak)
-- Conduction and switching losses
-- Efficiency with color-coded indicator
-- THD (for VSI)
-
-### Numerical Simulation
-Enable the "Numerical Simulation" checkbox to run an RK4 time-domain simulation:
-- Buck/Boost: inductor current and capacitor voltage waveforms
-- VSI: output current waveform with PWM switching
-
-### Visual Elements
-- **Parameter Panel** — sliders and inputs with tooltips for every parameter
-- **Schematic View** — functional circuit diagram with component values annotated
-- **Waveform Plots** — Vout and inductor current (analytical + simulation)
-- **Results Panel** — all computed metrics with SI-prefix formatting
-
-### Persistence & Export
-- **Save/Load** project state as JSON (`project.tupan.json`)
-- **Export SVG** — export the schematic as a scalable vector graphic
+---
 
 ## Quick Start
 
+1. **Download** the latest binary from [Releases](https://github.com/osogyian/tupan/releases)
+2. **Make it executable** (macOS/Linux):
+   ```sh
+   chmod +x tupan-macos
+   ```
+3. **Run it**:
+   ```sh
+   ./tupan-macos
+   ```
+4. No installation, no Python, no dependencies needed.
+
+---
+
+## How to Use
+
+### Main Window Layout
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ ⚡ Tupan      [🌙]  [💾 Save] [📂 Open] [📤 Export]   │
+├──────────┬───────────────────────────┬──────────────────┤
+│          │                           │                  │
+│  Knobs   │   Schematic               │   Results        │
+│  (design │                           │   ─────────      │
+│   params)│   Waveform Plots          │   Vout 12.00 V   │
+│          │                           │   Iout 5.00 A   │
+│          │                           │   Eff   92.3%    │
+│          │                           │                  │
+├──────────┴───────────────────────────┴──────────────────┤
+│ Computed: L=60.00μH  C=1.302μF  R=2.400Ω              │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Input Conditions (knobs on the left)
+
+Turn each knob or type a value directly in the number field below it:
+
+| Knob | What it does | Range |
+|------|-------------|-------|
+| **Vin** | DC input voltage | 1 – 500 V |
+| **Vout** | Target output voltage | 0.5 – 500 V |
+| **Duty** | Duty cycle (auto = Vout/Vin) | 1 – 99 % |
+| **Frequency** | Switching frequency (log knob) | 100 Hz – 1 MHz |
+
+**Vout ↔ Duty interaction:**
+- Turn **Vout** → Duty auto-recalculates (`D = Vout / Vin`)
+- Turn **Duty** → Vout auto-recalculates (`Vout = Vin × D`)
+- Turn **Vin** → Duty adjusts to keep your Vout target
+
+### Design Targets
+
+| Knob | What it does | Range |
+|------|-------------|-------|
+| **Iout,max** | Maximum load current you need | 0.01 – 100 A |
+| **ΔiL** | Inductor current ripple (as % of Iout,max) | 1 – 100 % |
+| **ΔVo** | Output voltage ripple (as % of Vout) | 0.01 – 50 % |
+
+### Computed Components (auto-update)
+
+As you turn any knob, the tool immediately computes:
+
+| Value | What it means |
+|-------|-------------|
+| **ΔiL (A)** | Inductor ripple current in amperes |
+| **ΔVo (V)** | Output ripple voltage in volts |
+| **L** | Required inductance |
+| **C** | Required capacitance |
+| **R** | Load resistance (Ohm's law: Vout / Iout,max) |
+
+### Results Panel (right side)
+
+Shows the operating point and performance:
+
+- **Duty cycle** summary with Vout/Vin
+- **Vout, Iout, Iin** — output and input currents
+- **Ripple** — output voltage ripple and inductor current ripple (peak-to-peak)
+- **Losses** — conduction and switching losses
+- **Efficiency** — color-coded:
+  - 🟢 **Green** (> 95%) — excellent
+  - 🟡 **Yellow** (> 85%) — acceptable
+  - 🔴 **Red** (< 85%) — needs improvement
+
+### Waveform Plots (center bottom)
+
+- **Output voltage** over 10 switching periods with ripple detail
+- **Inductor current** triangular waveform
+- Enable **"Numerical simulation"** checkbox for an RK4 time-domain overlay (more accurate waveform)
+
+### Schematic (center top)
+
+Auto-generated circuit diagram using your current component values. Updates as you change parameters.
+
+---
+
+## Toolbar
+
+| Button | Action |
+|--------|--------|
+| 🌙 / ☀️ | Toggle dark/light theme |
+| 💾 Save | Save your current design to a `.json` file |
+| 📂 Open | Load a previously saved design |
+| 📤 Export | Export the schematic as a PNG image |
+
+---
+
+## Tips
+
+- **Start with defaults**: Vin=48V, Vout=12V, Iout,max=5A — then tweak
+- **Higher frequency** → smaller L and C (cheaper components) but more switching losses
+- **Higher ΔiL** → smaller inductor but more ripple current
+- **Higher ΔVo** → smaller capacitor but more ripple voltage
+- Click the **Numerical simulation** checkbox to see RK4 waveforms overlay
+
+---
+
+## Building from Source
+
 ```sh
-cargo run
+git clone https://github.com/osogyian/tupan.git
+cd tupan
+pip install poetry
+poetry install
+poetry run python -m tupan
 ```
 
-### Usage
-1. Select converter type (Buck, Boost, or VSI) using the tabs in the left panel
-2. Adjust parameters with sliders — all results update instantly
-3. Toggle "Numerical Simulation" for time-domain waveforms
-4. Click "Save" to persist your project, "Export SVG" to save the schematic
-5. Toggle dark/light theme with 🌙/☀️ button
-
-## Architecture
-
-```
-src/
-├── main.rs                 # Entry point
-├── app/                    # Application state and persistence
-│   ├── state.rs            # AppState, ConverterParams, ConverterResults
-│   ├── persistence.rs      # JSON save/load, SVG export
-│   └── mod.rs              # TupanApp, toolbar, event loop
-├── domain/                 # Pure functional engineering models
-│   ├── converters/         # Buck, Boost analytical calculations
-│   ├── inverter/           # VSI, PWM generation
-│   ├── components/         # Inductor, capacitor, load design
-│   └── metrics/            # Ripple, efficiency, THD
-├── simulation/             # Numerical simulation
-│   ├── integrator.rs       # Runge-Kutta 4 (RK4)
-│   └── circuit_odes.rs     # ODE systems for each converter
-├── schematic/              # Circuit diagram rendering
-│   ├── layout.rs           # Pre-defined component positions
-│   ├── primitives.rs       # Schematic element types
-│   └── export_svg.rs       # SVG export
-└── ui/                     # egui interface panels
-    ├── workspace.rs        # Main layout (3-panel split)
-    ├── param_panel.rs      # Parameter sliders
-    ├── result_panel.rs     # Computed metrics
-    ├── plot_panel.rs       # Waveform plots (egui_plot)
-    ├── schematic_view.rs   # egui::Painter schematic rendering
-    └── converter_selector.rs  # Buck/Boost/VSI tabs
+Run tests:
+```sh
+poetry run pytest
 ```
 
-### Key Design Decisions
-- **Pure domain layer**: `domain/` modules have no egui dependency — just structs and pure functions
-- **Single source of truth**: `AppState` holds all state; `recalculate()` dispatches to the correct converter
-- **Immediate mode rendering**: egui's 60 FPS loop provides automatic real-time updates
-- **SI-prefix formatting**: values displayed with μ, m, k, M prefixes automatically
+Build standalone executable with Nuitka:
+```sh
+poetry run nuitka --standalone --onefile --enable-plugin=pyside6 tupan/__main__.py
+```
 
-## Technical Notes
-
-- Built with **eframe** (egui framework) and **egui_plot** for graphics
-- **~4400 lines of Rust**, 59 unit tests
-- Analytical models assume Continuous Conduction Mode (CCM)
-- Loss models use typical component parameters (100 mΩ Rds(on), 20ns switching times)
-- PWM: bipolar sine-triangle modulation
+---
 
 ## License
 

@@ -45,27 +45,36 @@ jobs:
           sudo apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libgl1 libegl1
       - name: Install dependencies
         run: poetry install
-      - name: Build with Nuitka
+      - name: Build with Nuitka (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          poetry run nuitka \
+            --standalone \
+            --enable-plugin=pyside6 \
+            --output-dir=dist \
+            --macos-create-app-bundle \
+            --macos-app-name=Tupan \
+            --macos-app-version=${{ github.ref_name }} \
+            tupan/
+      - name: Build with Nuitka (Linux)
+        if: runner.os == 'Linux'
         run: |
           poetry run nuitka \
             --standalone \
             --onefile \
             --enable-plugin=pyside6 \
             --output-dir=dist \
-            --assume-yes-for-downloads \
-            tupan/__main__.py
-      - name: Rename binary
-        run: |
-          if [ "${{ runner.os }}" == "macOS" ]; then
-            mv dist/__main__.bin dist/tupan-macos
-          else
-            mv dist/__main__.bin dist/tupan-linux
-          fi
+            tupan/
+      - name: Rename artifact (Linux)
+        if: runner.os == 'Linux'
+        run: mv dist/tupan.bin dist/tupan-linux
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tupan-${{ runner.os }}
-          path: dist/tupan-*
+          path: |
+            dist/tupan.app
+            dist/tupan-linux
 
   release:
     name: Create GitHub Release
@@ -89,14 +98,18 @@ jobs:
             ## Tupan ${{ github.ref_name }}
 
             ### Downloads
-            - **macOS**: `tupan-macos` (universal binary)
-            - **Linux**: `tupan-linux` (x86_64)
+            - **macOS**: `tupan.app` (double-click to run)
+            - **Linux**: `tupan-linux` (standalone executable)
 
             ### How to Use
-            1. Download the binary for your OS
-            2. Make it executable: `chmod +x tupan-*`
-            3. Run it: `./tupan-*`
-            4. No installation required
+            **macOS**:
+            1. Download `tupan.app`
+            2. Double-click to open
+            3. If macOS blocks it, right-click → Open
+
+            **Linux**:
+            1. Download `tupan-linux`
+            2. `chmod +x tupan-linux && ./tupan-linux`
 
             ### What's New
             See the commit history for details.

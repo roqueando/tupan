@@ -8,15 +8,9 @@ Download the latest release for your OS, double-click, and start designing.
 
 ## Quick Start
 
-1. **Download** the latest binary from [Releases](https://github.com/osogyian/tupan/releases)
-2. **Make it executable** (macOS/Linux):
-   ```sh
-   chmod +x tupan-macos
-   ```
-3. **Run it**:
-   ```sh
-   ./tupan-macos
-   ```
+1. **Download** the latest release from [Releases](https://github.com/osogyian/tupan/releases)
+2. **macOS**: Download `tupan.app` and double-click it
+3. **Linux**: Download `tupan-linux`, make executable (`chmod +x tupan-linux`) and run `./tupan-linux`
 4. No installation, no Python, no dependencies needed.
 
 ---
@@ -138,9 +132,27 @@ Run tests:
 poetry run pytest
 ```
 
-Build standalone executable with Nuitka:
+### macOS
+Build a double-clickable `.app` bundle:
 ```sh
-poetry run nuitka --standalone --onefile --enable-plugin=pyside6 tupan/__main__.py
+poetry run nuitka --standalone \
+  --enable-plugin=pyside6 \
+  --output-dir=dist \
+  --macos-create-app-bundle \
+  --macos-app-name=Tupan \
+  --macos-app-version=0.1.0 \
+  tupan/
+```
+The app will be at `dist/tupan.app` — double-click to run.
+
+### Linux
+Build a standalone executable:
+```sh
+poetry run nuitka --standalone \
+  --onefile \
+  --enable-plugin=pyside6 \
+  --output-dir=dist \
+  tupan/
 ```
 
 ---

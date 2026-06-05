@@ -1,25 +1,22 @@
-"""Converter type selector.
-
-Currently focused on Buck converter. Boost and VSI are shown but
-deferred for future implementation.
+"""Converter type selector using the Strategy registry.
 """
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
 
 from tupan.app.state import AppState
-from tupan.domain import ConverterType
+from tupan.domain.converters import get_all_strategies, ConverterStrategy
 
 
 class ConverterSelector(QWidget):
     """Button group for selecting converter type."""
 
-    converter_changed = Signal(ConverterType)
+    converter_changed = Signal(object)  # ConverterStrategy
 
     def __init__(self, state: AppState, parent=None):
         super().__init__(parent)
         self.state = state
-        self.buttons = {}
+        self.buttons: dict[str, QPushButton] = {}
         self._setup_ui()
 
     def _setup_ui(self):
@@ -29,43 +26,29 @@ class ConverterSelector(QWidget):
 
         layout.addWidget(QLabel("Converter:"))
 
-        # Buck — fully supported
-        self._add_button(ConverterType.Buck, "Buck", layout)
-
-        # Boost — shown but disabled (deferred)
-        boost_btn = self._add_button(ConverterType.Boost, "Boost", layout)
-        boost_btn.setEnabled(False)
-        boost_btn.setToolTip("Boost converter coming soon")
-
-        # VSI — shown but disabled (deferred)
-        vsi_btn = self._add_button(ConverterType.VsiSinglePhase, "VSI", layout)
-        vsi_btn.setEnabled(False)
-        vsi_btn.setToolTip("VSI coming soon")
+        strategies = get_all_strategies()
+        for s in strategies:
+            btn = QPushButton(s.label())
+            btn.setCheckable(True)
+            btn.setChecked(s.label() == self.state.strategy.label())
+            btn.clicked.connect(lambda checked, st=s: self._select(st))
+            self.buttons[s.label()] = btn
+            layout.addWidget(btn)
 
         layout.addStretch()
 
-    def _add_button(self, conv_type, label, layout):
-        btn = QPushButton(label)
-        btn.setCheckable(True)
-        btn.setChecked(conv_type == self.state.active_converter)
-        if conv_type == ConverterType.Buck:
-            btn.clicked.connect(lambda checked, ct=conv_type: self._select(ct))
-        self.buttons[conv_type] = btn
-        layout.addWidget(btn)
-        return btn
-
-    def _select(self, conv_type: ConverterType):
+    def _select(self, strategy: ConverterStrategy):
         """Handle converter selection."""
-        if conv_type == self.state.active_converter:
+        if strategy.label() == self.state.strategy.label():
             return
-        for ct, btn in self.buttons.items():
-            btn.setChecked(ct == conv_type)
-        self.state.active_converter = conv_type
+        for lbl, btn in self.buttons.items():
+            btn.setChecked(lbl == strategy.label())
+        self.state.strategy = strategy
         self.state.reset_params()
-        self.converter_changed.emit(conv_type)
+        self.converter_changed.emit(strategy)
 
     def update_state(self, state: AppState):
         """Refresh UI to match state."""
         self.state = state
-        for ct, btn in self.buttons.items():
-            btn.setChecked(ct == state.active_converter)
+        for lbl, btn in self.buttons.items():
+            btn.setChecked(lbl == state.strategy.label())

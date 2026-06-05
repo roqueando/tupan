@@ -83,12 +83,8 @@ class PlotPanel(QWidget):
         self.ax_vout = self.figure.add_subplot(211)
         self.ax_il = self.figure.add_subplot(212)
 
-        if self.state.active_converter in (
-            ConverterType.Buck, ConverterType.Boost
-        ):
-            self._plot_dc_converter()
-        elif self.state.active_converter == ConverterType.VsiSinglePhase:
-            self._plot_vsi()
+        # Always use buck plotting for now
+        self._plot_dc_converter()
 
         self.figure.tight_layout(pad=2.0)
         self.canvas.draw()

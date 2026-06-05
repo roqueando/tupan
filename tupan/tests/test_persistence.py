@@ -6,8 +6,6 @@ from tupan.app.state import AppState, Theme
 from tupan.app.persistence import (
     save_project, load_project, state_to_dict, dict_to_state
 )
-from tupan.domain import ConverterType
-from tupan.domain.design_params import DesignParams
 
 
 def test_save_load_roundtrip():

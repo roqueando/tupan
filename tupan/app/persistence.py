@@ -3,8 +3,7 @@
 import json
 import os
 from tupan.app.state import AppState, Theme
-from tupan.domain import ConverterType, ConverterResults
-from tupan.domain.design_params import DesignParams, DesignResults
+from tupan.domain import ConverterResults
 
 
 def state_to_dict(state: AppState) -> dict:
@@ -12,7 +11,6 @@ def state_to_dict(state: AppState) -> dict:
     return {
         "theme": state.theme.value,
         "status_message": state.status_message,
-        "active_converter": state.active_converter.value,
         "show_numerical_sim": state.show_numerical_sim,
         "design": {
             "vin": state.design.vin,
@@ -40,7 +38,6 @@ def dict_to_state(d: dict) -> AppState:
     """Restore AppState from a JSON-deserialized dict."""
     state = AppState()
 
-    # Theme
     theme_str = d.get("theme", "Dark")
     for t in Theme:
         if t.value == theme_str:
@@ -50,14 +47,6 @@ def dict_to_state(d: dict) -> AppState:
     state.status_message = d.get("status_message", "Loaded")
     state.show_numerical_sim = d.get("show_numerical_sim", False)
 
-    # Converter type
-    ct_str = d.get("active_converter", "Buck")
-    for ct in ConverterType:
-        if ct.value == ct_str:
-            state.active_converter = ct
-            break
-
-    # Design params
     des = d.get("design", {})
     state.design.vin = des.get("vin", 48.0)
     state.design.vout = des.get("vout", 12.0)
@@ -67,10 +56,10 @@ def dict_to_state(d: dict) -> AppState:
     state.design.delta_il_pct = des.get("delta_il_pct", 0.30)
     state.design.delta_vo_pct = des.get("delta_vo_pct", 0.01)
 
-    # Recompute design results + analytical results
+    # Recompute from saved design params
     state.recalculate()
 
-    # Override analytical results from saved values if present
+    # Optionally override results from saved values
     res = d.get("results", {})
     if res:
         state.results.vout = res.get("vout", state.results.vout)

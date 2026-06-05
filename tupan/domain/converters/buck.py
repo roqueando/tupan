@@ -4,6 +4,8 @@ All functions in this module are stateless and have no GUI dependency.
 They take float parameters and return float or ConverterResults dataclass.
 """
 
+from tupan.domain import ConverterResults
+from tupan.domain.design_params import DesignParams, DesignResults
 from tupan.domain.converters.common import switching_period, valid_duty_cycle
 
 # Default loss parameters
@@ -141,3 +143,83 @@ def calculate(vin: float, vout_target: float, frequency: float,
         rms_output=None,
         fundamental_amplitude=None,
     )
+
+
+# ── BuckStrategy ──
+
+from tupan.domain.converters import (
+    ConverterStrategy, clamp_duty, register_strategy
+)
+
+
+class BuckStrategy(ConverterStrategy):
+    """Buck (step-down) converter design strategy."""
+
+    def name(self) -> str:
+        return "Buck Converter"
+
+    def label(self) -> str:
+        return "Buck"
+
+    def compute_components(self, params: DesignParams) -> DesignResults:
+        """Compute required L, C, R from design specs."""
+        duty = clamp_duty(params.duty_cycle)
+        vout = params.vout
+        freq = params.frequency
+        iout_max = params.iout_max
+
+        delta_il_amps = params.delta_il_pct * iout_max
+        delta_vo_volts = params.delta_vo_pct * vout
+
+        r_load = vout / iout_max if iout_max > 0.0 else 10.0
+
+        if delta_il_amps > 0.0 and freq > 0.0:
+            l_val = (vout * (1.0 - duty)) / (delta_il_amps * freq)
+        else:
+            l_val = 0.0
+
+        if l_val > 0.0 and delta_vo_volts > 0.0 and freq > 0.0:
+            c_val = (1.0 - duty) / (8.0 * l_val * delta_vo_volts * freq * freq)
+        else:
+            c_val = 0.0
+
+        return DesignResults(
+            delta_il_amps=delta_il_amps,
+            delta_vo_volts=delta_vo_volts,
+            inductance=l_val,
+            capacitance=c_val,
+            load_resistance=r_load,
+        )
+
+    def analyze(self, params: DesignParams,
+                components: DesignResults) -> ConverterResults:
+        """Full analytical calculation for buck."""
+        duty = clamp_duty(params.duty_cycle)
+        vout = output_voltage(params.vin, duty)
+        iout = output_current(vout, components.load_resistance)
+        iin = input_current(iout, duty)
+        il_rip = inductor_current_ripple(
+            params.vin, duty, params.frequency, components.inductance
+        )
+        vo_rip = output_voltage_ripple(
+            il_rip, params.frequency, components.capacitance
+        )
+
+        cl = conduction_losses(iout, duty)
+        sl = switching_losses(params.vin, iout, params.frequency)
+
+        total = cl + sl
+        p_out = vout * iout
+        eff = p_out / (p_out + total) if (p_out + total) > 0.0 else 1.0
+
+        return ConverterResults(
+            vout=vout, iout=iout, iin=iin,
+            vout_ripple=vo_rip, il_ripple=il_rip,
+            conduction_losses=cl, switching_losses=sl,
+            efficiency=eff,
+        )
+
+
+# Register the strategy
+BUCK = BuckStrategy()
+register_strategy(BUCK)

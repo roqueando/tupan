@@ -61,7 +61,9 @@ class SchematicView(QWidget):
             duty_cycle=f"{self.state.design.duty_cycle * 100:.1f}%",
         )
 
-        png_data = draw_converter(self.state.active_converter, labels)
+        # For now, always use buck converter schematic
+        from tupan.domain import ConverterType
+        png_data = draw_converter(ConverterType.Buck, labels)
         pixmap = QPixmap()
         if pixmap.loadFromData(png_data, "PNG"):
             # Scale to fit width while maintaining aspect ratio

@@ -9,6 +9,7 @@ from PySide6.QtGui import QAction
 
 from tupan.app.state import AppState, Theme
 from tupan.app.persistence import save_project, load_project
+from PySide6.QtWidgets import QApplication
 from tupan.ui.theme import apply_theme
 from tupan.ui.workspace import WorkspaceWidget
 from tupan.schematic.schemdraw_layout import draw_converter, ComponentLabels
@@ -78,7 +79,7 @@ class TupanApp(QMainWindow):
     def _toggle_theme(self):
         is_dark = self.state.theme is Theme.Dark
         self.state.theme = Theme.Light if is_dark else Theme.Dark
-        apply_theme(self, dark=(self.state.theme is Theme.Dark))
+        apply_theme(QApplication.instance(), dark=(self.state.theme is Theme.Dark))
         self.theme_btn.setText(
             "Light" if self.state.theme is Theme.Dark else "Dark"
         )
@@ -130,7 +131,8 @@ class TupanApp(QMainWindow):
                     frequency=format_eng(self.state.design.frequency, "Hz"),
                     duty_cycle=f"{self.state.design.duty_cycle * 100:.1f}%",
                 )
-                png_data = draw_converter(self.state.active_converter, labels)
+                from tupan.domain import ConverterType
+                png_data = draw_converter(ConverterType.Buck, labels)
                 with open(path, 'wb') as f:
                     f.write(png_data)
                 self.state.status_message = f"SVG exported to {path}"

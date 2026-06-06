@@ -56,6 +56,20 @@ jobs:
             --macos-app-name=Tupan \
             --macos-app-version=${{ github.ref_name }} \
             tupan/
+      - name: Package macOS .app into .dmg
+        if: runner.os == 'macOS'
+        run: |
+          # Create a DMG disk image from the .app bundle (standard macOS distribution format)
+          # This ensures the release artifact is a single file, not a flattened directory
+          DMG_NAME="Tupan-${{ github.ref_name }}.dmg"
+          hdiutil create \
+            -srcfolder dist/tupan.app \
+            -volname "Tupan" \
+            -format UDZO \
+            -ov \
+            "dist/$DMG_NAME"
+          echo "Created $DMG_NAME"
+          ls -lh "dist/$DMG_NAME"
       - name: Build with Nuitka (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -73,7 +87,7 @@ jobs:
         with:
           name: tupan-${{ runner.os }}
           path: |
-            dist/tupan.app
+            dist/*.dmg
             dist/tupan-linux
 
   release:
@@ -98,14 +112,15 @@ jobs:
             ## Tupan ${{ github.ref_name }}
 
             ### Downloads
-            - **macOS**: `tupan.app` (double-click to run)
+            - **macOS**: `Tupan-${{ github.ref_name }}.dmg` (disk image — mount and drag to Applications)
             - **Linux**: `tupan-linux` (standalone executable)
 
             ### How to Use
             **macOS**:
-            1. Download `tupan.app`
-            2. Double-click to open
-            3. If macOS blocks it, right-click → Open
+            1. Download `Tupan-${{ github.ref_name }}.dmg`
+            2. Double-click the `.dmg` to mount it
+            3. Drag `Tupan.app` into your `Applications` folder
+            4. If macOS blocks it, right-click → Open
 
             **Linux**:
             1. Download `tupan-linux`

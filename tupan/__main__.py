@@ -7,7 +7,7 @@ Usage:
 import sys
 from PySide6.QtWidgets import QApplication
 from tupan.app.app import TupanApp
-from tupan.ui.theme import apply_theme, get_colors
+from tupan.ui.theme import apply_theme
 
 
 def main():
@@ -15,8 +15,8 @@ def main():
     app.setApplicationName("Tupan")
     app.setOrganizationName("Tupan")
 
-    # Apply dark theme by default
-    apply_theme(app, dark=True)
+    # Apply light theme
+    apply_theme(app)
 
     window = TupanApp()
     window.show()

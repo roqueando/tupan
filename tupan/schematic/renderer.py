@@ -12,11 +12,11 @@ from tupan.schematic.primitives import (
     Pos, Wire, Source, Switch, Diode, Inductor, Capacitor,
     Resistor, Ground, Label, SchematicElement,
 )
-from tupan.ui.theme import get_colors
+from tupan.ui.theme import COLORS
 
 
 def draw_element(painter: QPainter, element: SchematicElement,
-                 origin: QPointF, dark: bool = True,
+                 origin: QPointF,
                  highlight: bool = False):
     """Draw a single schematic element on the canvas.
 
@@ -24,10 +24,9 @@ def draw_element(painter: QPainter, element: SchematicElement,
         painter: QPainter to draw with
         element: The element to draw
         origin: Offset to add to all positions (for canvas panning)
-        dark: Use dark theme colors
         highlight: If True, draw selection highlight
     """
-    colors = get_colors(dark)
+    colors = COLORS
 
     pen = QPen(QColor(colors["wire"]), 2.0)
     highlight_pen = QPen(QColor("#ffff00"), 1.5)

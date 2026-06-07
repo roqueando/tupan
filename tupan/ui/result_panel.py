@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLabel, QGroupB
 
 from tupan.app.state import AppState
 from tupan.ui.schematic_view import format_eng
-from tupan.ui.theme import get_colors
+from tupan.ui.theme import COLORS
 
 
 class ResultPanel(QWidget):
@@ -63,9 +63,6 @@ class ResultPanel(QWidget):
         res = state.results
         comp = state.computed
 
-        is_dark = state.theme.value == "Dark"
-        colors = get_colors(is_dark)
-
         self.duty_label.setText(
             f"Duty cycle: {state.design.duty_cycle * 100:.1f}%  "
             f"(Vout={state.design.vout:.2f}V, Vin={state.design.vin:.1f}V)"
@@ -81,15 +78,15 @@ class ResultPanel(QWidget):
         total_loss = res.conduction_losses + res.switching_losses
         self.total_loss_label.setText(format_eng(total_loss, "W"))
 
-        # Efficiency color — use theme-aware colors
+        # Efficiency color — use theme colors
         eff = res.efficiency
         eff_pct = f"{eff * 100:.1f}%"
         if eff > 0.95:
-            color = colors["success"]
+            color = COLORS["success"]
         elif eff > 0.85:
-            color = colors["warning"]
+            color = COLORS["warning"]
         else:
-            color = colors["error"]
+            color = COLORS["error"]
 
         self.eff_label.setText(
             f'<span style="color:{color};font-weight:bold;font-size:14px;">{eff_pct}</span>'

@@ -171,8 +171,6 @@ class ParamPanel(QWidget):
         self.dvo_knob.set_value(d.delta_vo_pct * 100.0)
         self.dvo_knob.blockSignals(False)
 
-        is_dark = self.state.theme.value == "Dark"
-        self.computed_widget.set_dark(is_dark)
         self.computed_widget.update_values(self.state.computed)
 
         self.sim_cb.blockSignals(True)

@@ -2,15 +2,13 @@
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QPushButton, QLabel,
+    QMainWindow, QWidget, QLabel,
     QFileDialog, QMessageBox, QToolBar, QSizePolicy,
 )
 from PySide6.QtGui import QAction
 
-from tupan.app.state import AppState, Theme
+from tupan.app.state import AppState
 from tupan.app.persistence import save_project, load_project
-from PySide6.QtWidgets import QApplication
-from tupan.ui.theme import apply_theme
 from tupan.ui.workspace import WorkspaceWidget
 from tupan.schematic.schemdraw_layout import draw_converter, ComponentLabels
 
@@ -22,8 +20,8 @@ class TupanApp(QMainWindow):
         self.state = AppState()
         self.state.recalculate()
 
-        self.setWindowTitle("Tupan - Power Electronics Workbench")
-        self.setMinimumSize(1100, 760)
+        self.setWindowTitle("tupan")
+        self.setMinimumSize(1200, 760)
         self.resize(1200, 800)
 
         self.workspace = WorkspaceWidget(self.state)
@@ -36,20 +34,11 @@ class TupanApp(QMainWindow):
         tb.setMovable(False)
         self.addToolBar(tb)
 
-        title = QLabel("Tupan")
-        title.setStyleSheet("font-size: 16px; font-weight: bold; padding: 0 8px;")
-        tb.addWidget(title)
+        # title = QLabel("Tupan")
+        # title.setStyleSheet("font-size: 16px; font-weight: bold; padding: 0 8px;")
+        # tb.addWidget(title)
 
-        tb.addSeparator()
-
-        self.theme_btn = QPushButton(
-            "Light" if self.state.theme is Theme.Dark else "Dark"
-        )
-        self.theme_btn.setToolTip("Toggle dark/light theme")
-        self.theme_btn.clicked.connect(self._toggle_theme)
-        tb.addWidget(self.theme_btn)
-
-        tb.addSeparator()
+        # tb.addSeparator()
 
         save_act = QAction("Save", self)
         save_act.setToolTip("Save project to JSON")
@@ -75,17 +64,6 @@ class TupanApp(QMainWindow):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         tb.addWidget(spacer)
-
-    def _toggle_theme(self):
-        is_dark = self.state.theme is Theme.Dark
-        self.state.theme = Theme.Light if is_dark else Theme.Dark
-        apply_theme(QApplication.instance(), dark=(self.state.theme is Theme.Dark))
-        self.theme_btn.setText(
-            "Light" if self.state.theme is Theme.Dark else "Dark"
-        )
-        self.workspace.refresh_plot_theme()
-        self.state.status_message = f"Theme: {self.state.theme.value}"
-        self.status_label.setText(self.state.status_message)
 
     def _save_project(self):
         path, _ = QFileDialog.getSaveFileName(

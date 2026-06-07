@@ -10,7 +10,6 @@ from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout
 
 from tupan.app.state import AppState
 from tupan.schematic.schemdraw_layout import draw_converter, ComponentLabels
-from tupan.ui.theme import get_colors
 
 
 def format_eng(value: float, unit: str) -> str:

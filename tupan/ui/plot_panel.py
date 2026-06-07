@@ -13,7 +13,7 @@ from matplotlib.figure import Figure
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 from tupan.app.state import AppState
-from tupan.ui.theme import get_colors
+from tupan.ui.theme import COLORS
 
 
 class PlotPanel(QWidget):
@@ -37,31 +37,17 @@ class PlotPanel(QWidget):
         self._setup_style()
 
     def _setup_style(self):
-        is_dark = self.state.theme.value == "Dark"
-        if is_dark:
-            matplotlib.rcParams.update({
-                "figure.facecolor": "#11111b",
-                "axes.facecolor": "#1e1e2e",
-                "axes.edgecolor": "#6c7086",
-                "axes.labelcolor": "#cdd6f4",
-                "text.color": "#cdd6f4",
-                "xtick.color": "#a6adc8",
-                "ytick.color": "#a6adc8",
-                "grid.color": "#313244",
-                "grid.alpha": 0.5,
-            })
-        else:
-            matplotlib.rcParams.update({
-                "figure.facecolor": "#dce0e8",
-                "axes.facecolor": "#eff1f5",
-                "axes.edgecolor": "#9ca0b0",
-                "axes.labelcolor": "#4c4f69",
-                "text.color": "#4c4f69",
-                "xtick.color": "#5c5f77",
-                "ytick.color": "#5c5f77",
-                "grid.color": "#ccd0da",
-                "grid.alpha": 0.5,
-            })
+        matplotlib.rcParams.update({
+            "figure.facecolor": COLORS["bg_primary"],
+            "axes.facecolor": COLORS["card_bg"],
+            "axes.edgecolor": COLORS["border"],
+            "axes.labelcolor": COLORS["text_primary"],
+            "text.color": COLORS["text_primary"],
+            "xtick.color": COLORS["text_secondary"],
+            "ytick.color": COLORS["text_secondary"],
+            "grid.color": COLORS["border"],
+            "grid.alpha": 0.5,
+        })
 
     def update_state(self, state):
         self.state = state

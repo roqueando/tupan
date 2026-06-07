@@ -5,7 +5,6 @@ the correct converter type.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 
 from tupan.domain import ConverterResults
 from tupan.domain.design_params import DesignParams, DesignResults
@@ -13,15 +12,9 @@ from tupan.domain.converters.buck import BUCK
 from tupan.domain.converters import clamp_duty
 
 
-class Theme(Enum):
-    Dark = "Dark"
-    Light = "Light"
-
-
 @dataclass
 class AppState:
     """Main application state — single source of truth."""
-    theme: Theme = Theme.Dark
     status_message: str = "Ready"
     design: DesignParams = field(default_factory=DesignParams)
     computed: DesignResults = field(default_factory=DesignResults)

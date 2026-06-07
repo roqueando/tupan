@@ -2,14 +2,13 @@
 
 import json
 import os
-from tupan.app.state import AppState, Theme
+from tupan.app.state import AppState
 from tupan.domain import ConverterResults
 
 
 def state_to_dict(state: AppState) -> dict:
     """Convert AppState to a JSON-serializable dict."""
     return {
-        "theme": state.theme.value,
         "status_message": state.status_message,
         "show_numerical_sim": state.show_numerical_sim,
         "design": {
@@ -37,12 +36,6 @@ def state_to_dict(state: AppState) -> dict:
 def dict_to_state(d: dict) -> AppState:
     """Restore AppState from a JSON-deserialized dict."""
     state = AppState()
-
-    theme_str = d.get("theme", "Dark")
-    for t in Theme:
-        if t.value == theme_str:
-            state.theme = t
-            break
 
     state.status_message = d.get("status_message", "Loaded")
     state.show_numerical_sim = d.get("show_numerical_sim", False)

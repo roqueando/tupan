@@ -1,4 +1,4 @@
 {
-    "python.defaultInterpreterPath": "/Users/roqueando/projects/itanna/.venv/bin/python",
+    "python.defaultInterpreterPath": "/Users/roqueando/.itanna/.venv/bin/python",
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }

@@ -17,20 +17,25 @@ class ComputedValuesWidget(QGroupBox):
         layout.setContentsMargins(8, 8, 8, 8)
 
         self.dil_label = QLabel("--")
+        self.dil_label.setWordWrap(True)
         self.dil_label.setStyleSheet("font-weight: bold;")
         layout.addRow("\u0394iL (A):", self.dil_label)
 
         self.dvo_label = QLabel("--")
+        self.dvo_label.setWordWrap(True)
         self.dvo_label.setStyleSheet("font-weight: bold;")
         layout.addRow("\u0394Vo (V):", self.dvo_label)
 
         self.l_label = QLabel("--")
+        self.l_label.setWordWrap(True)
         layout.addRow("L:", self.l_label)
 
         self.c_label = QLabel("--")
+        self.c_label.setWordWrap(True)
         layout.addRow("C:", self.c_label)
 
         self.r_label = QLabel("--")
+        self.r_label.setWordWrap(True)
         layout.addRow("R:", self.r_label)
 
         self._apply_theme()
